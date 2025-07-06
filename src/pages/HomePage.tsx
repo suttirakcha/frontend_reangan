@@ -4,6 +4,7 @@ import noAdsImg from "@/assets/no-ads-img.svg";
 import learnAnywhereImg from "@/assets/learn-anywhere-img.svg";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import HomeSection from "@/components/custom/HomeSection";
 
 function HomePage() {
   return (
@@ -25,51 +26,30 @@ function HomePage() {
           </div>
         </div>
       </section>
-      <section className="py-20">
-        <div className="grid lg:grid-cols-2 items-center p-12 mx-auto max-w-[1300px]">
-          <div className="flex justify-start">
-            <img
-              src={freeAccessImg}
-              className="w-[400px] h-[400px] rounded-full"
-            />
-          </div>
-          <div className="flex flex-col gap-8 text-end">
-            <h1 className="title-xl">Completely Free Access</h1>
-            <p>
-              All courses are 100% free, so you can explore and learn without
-              worrying about subscription fees or hidden costs.
-            </p>
-          </div>
-        </div>
-      </section>
-      <section className="py-20">
-        <div className="grid lg:grid-cols-2 items-center p-12 mx-auto max-w-[1300px]">
-          <div className="flex flex-col gap-8">
-            <h1 className="title-xl">Ad-Free Experience</h1>
-            <p>
-              Enjoy uninterrupted learning with no annoying ads — focus entirely
-              on mastering your new language.
-            </p>
-          </div>
-          <div className="flex justify-end">
-            <img src={noAdsImg} className="w-[400px] h-[400px] rounded-full" />
-          </div>
-        </div>
-      </section>
-      <section className="pt-20">
-        <div className="grid lg:grid-cols-2 items-center p-12 pb-0 mx-auto max-w-[1300px]">
-          <div className="flex justify-start">
-            <img src={learnAnywhereImg} className="w-[600px] h-[600px]" />
-          </div>
-          <div className="flex flex-col gap-8 text-end">
-            <h1 className="title-xl">Learn Anytime, Anywhere</h1>
-            <p>
-              Learn at your own pace, on any device, wherever you are. Perfect
-              for busy schedules and on-the-go lifestyles.
-            </p>
-          </div>
-        </div>
-      </section>
+      <HomeSection
+        className="py-20"
+        imgSrc={freeAccessImg}
+        imgSide="left"
+        imgClassName="w-[400px] h-[400px] rounded-full"
+        title="Completely Free Access"
+        description="All courses are 100% free, so you can explore and learn without worrying about subscription fees or hidden costs."
+      />
+      <HomeSection
+        className="py-20"
+        imgSrc={noAdsImg}
+        imgSide="right"
+        imgClassName="w-[400px] h-[400px] rounded-full"
+        title="Ad-Free Experience"
+        description="Enjoy uninterrupted learning with no annoying ads — focus entirely on mastering your new language."
+      />
+      <HomeSection
+        className="p5-20"
+        imgSrc={learnAnywhereImg}
+        imgSide="left"
+        imgClassName="w-[600px] h-[600px]"
+        title="Learn Anytime, Anywhere"
+        description="Learn at your own pace, on any device, wherever you are. Perfect for busy schedules and on-the-go lifestyles."
+      />
       <section className="py-20 bg-orange-200">
         <div className="flex flex-col gap-8 text-center">
           <h1 className="title-xl">Learn Anytime, Anywhere</h1>

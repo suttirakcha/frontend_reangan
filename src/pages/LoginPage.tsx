@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import BackToHomeBtn from "@/components/custom/BackToHomeBtn";
 import { Input } from "@/components/ui/input";
-import useAuthStore from "@/stores/useAuthStore";
+import useUserStore from "@/stores/useUserStore";
 import { toast } from "sonner";
 
 const initialValues: LoginFields = {
@@ -14,7 +14,7 @@ const initialValues: LoginFields = {
 };
 
 function LoginPage() {
-  const login = useAuthStore((state) => state.login);
+  const login = useUserStore((state) => state.login);
   const navigate = useNavigate();
   const {
     register,
@@ -30,7 +30,10 @@ function LoginPage() {
     try {
       await new Promise((resolve, reject) => setTimeout(resolve, 2000));
       const res = await login(data);
-      if (res) navigate("/dashboard");
+      if (res){
+        navigate("/dashboard");
+        toast.success(res.data.message);
+      };
     } catch (err: any) {
       toast.error(err.response?.data?.message);
     } finally {
@@ -41,7 +44,7 @@ function LoginPage() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="max-w-[500px] mx-auto flex flex-col gap-4 p-5 w-full h-full anim-fade"
+      className="max-w-[500px] mx-auto flex flex-col gap-4 p-5 w-full h-[80vh] anim-fade"
     >
       <BackToHomeBtn className="justify-center" />
       <h1 className="title text-center mb-6">Login to ReanGan</h1>
@@ -68,7 +71,7 @@ function LoginPage() {
       </p>
 
       <p className="text-center">
-        <Link to="//register" className="text-orange-500 hover:underline">
+        <Link to="/register" className="text-orange-500 hover:underline">
           Forgot Password?
         </Link>
       </p>

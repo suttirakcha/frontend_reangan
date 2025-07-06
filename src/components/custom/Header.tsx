@@ -9,11 +9,11 @@ function Header() {
   return (
     <header
       className={cn(
-        "text-orange-400 w-full bg-white fixed inset-x-0 top-0 transition-all duration-500 mt-0 opacity-100 visible",
+        "text-orange-400 w-full bg-white fixed inset-x-0 top-0 transition-all duration-500 mt-0 opacity-100 visible z-2",
         { "-mt-18 opacity-0 invisible": isAuthPage }
       )}
     >
-      <nav className="flex items-center justify-between px-6 py-4 max-w-[1000px] mx-auto">
+      <nav className="flex items-center justify-between px-12 py-4 max-w-[1300px] mx-auto">
         <Link to="/" className="text-4xl font-bold">
           ReanGan
         </Link>

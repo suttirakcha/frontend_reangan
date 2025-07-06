@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import BackToHomeBtn from "@/components/custom/BackToHomeBtn";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import useAuthStore from "@/stores/useAuthStore";
+import useUserStore from "@/stores/useUserStore";
 
 const initialValues = {
   username: "",
@@ -17,7 +17,7 @@ const initialValues = {
 };
 
 function RegisterPage() {
-  const registerUser = useAuthStore(state => state.register);
+  const registerUser = useUserStore(state => state.register);
   const {
     register,
     handleSubmit,
@@ -31,7 +31,7 @@ function RegisterPage() {
     try {
       await new Promise((resolve, reject) => setTimeout(resolve, 2000));
       const res = await registerUser(data);
-      console.log(res);
+      toast.success(res.data.message);
     } catch (err: any) {
       toast.error(err.response?.data?.message)
     }
@@ -40,7 +40,7 @@ function RegisterPage() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="max-w-[500px] mx-auto flex flex-col gap-4 p-5 w-full h-full anim-fade"
+      className="max-w-[500px] mx-auto flex flex-col gap-4 p-5 w-full h-[80vh] anim-fade"
     >
       <BackToHomeBtn className="justify-center" />
       <h1 className="title text-center mb-6">Register to start learning</h1>
