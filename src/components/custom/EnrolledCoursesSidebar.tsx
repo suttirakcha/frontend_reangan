@@ -1,19 +1,28 @@
-import type { DataDetail } from "@/types";
+import useCourseStore from "@/stores/useCourseStore";
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
-interface EnrolledCoursesSidebarProps {
-  enrolledCourses: DataDetail[];
-}
+function EnrolledCoursesSidebar() {
+  const enrolledCourses = useCourseStore((state) => state.enrolledCourses);
+  const getEnrolledCourses = useCourseStore(
+    (state) => state.getEnrolledCourses
+  );
 
-function EnrolledCoursesSidebar({
-  enrolledCourses,
-}: EnrolledCoursesSidebarProps) {
+  useEffect(() => {
+    getEnrolledCourses();
+  }, []);
+
   return (
-    <div className="col-span-1">
+    <div className="col-span-1 space-y-2">
       <h1 className="title">Enrolled courses</h1>
-      {enrolledCourses.length > 0 ? (
-        <ul>
+      {enrolledCourses && enrolledCourses.length > 0 ? (
+        <ul className="flex flex-col gap-4">
           {enrolledCourses.map((course) => (
-            <li key={course.id}>{course.title}</li>
+            <li key={course.id} className="flex items-center justify-between">
+              <Link to={`/dashboard/course/${course.id}/lessons`}>
+                {course.title}
+              </Link>
+            </li>
           ))}
         </ul>
       ) : (

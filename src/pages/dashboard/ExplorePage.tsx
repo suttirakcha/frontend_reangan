@@ -1,4 +1,4 @@
-import DashboardSection from "@/components/custom/DashboardSection";
+import DashboardSection from "@/components/dashboard/DashboardSection";
 import EnrolledCoursesSidebar from "@/components/custom/EnrolledCoursesSidebar";
 import Loading from "@/components/custom/Loading";
 import { Button } from "@/components/ui/button";
@@ -11,37 +11,20 @@ import {
 } from "@/components/ui/card";
 import useCourseStore from "@/stores/useCourseStore";
 import useUserStore from "@/stores/useUserStore";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
-// Will remove soon
-const mockCourses = [
-  {
-    id: "abcde",
-    title: "English for Beginners",
-    description:
-      "In this lesson, you will learn basic English to adjust your English skills",
-  },
-  {
-    id: "abcdefg",
-    title: "Eng-Thai translations",
-    description:
-      "For those who are interested in learning English for Thai users or learning Thai for foreigners, you will learn how to translate English vocabulary and sentences in Thai",
-  },
-];
-
 function ExplorePage() {
-  // TODO: fetch the dynamic courses
+  const navigate = useNavigate();
   const user = useUserStore((state) => state.user);
+  const loading = useCourseStore((state) => state.loading);
   const courses = useCourseStore((state) => state.courses);
   const getCourses = useCourseStore((state) => state.getCourses);
   const enrollCourse = useCourseStore((state) => state.enrollCourse);
-  const enrolledCourses = useCourseStore((state) => state.enrolledCourses);
   const getEnrolledCourses = useCourseStore(
     (state) => state.getEnrolledCourses
   );
-  const loading = useCourseStore((state) => state.loading);
 
   const handleEnrollCourse = async (id: number) => {
     try {
@@ -54,13 +37,9 @@ function ExplorePage() {
     }
   };
 
-  const navigate = useNavigate();
-
-  // TODO: fetch the dynamic courses
   useEffect(() => {
     getCourses();
-    getEnrolledCourses();
-  }, [enrolledCourses]);
+  }, [courses]);
 
   if (loading) {
     return <Loading />;
@@ -96,7 +75,9 @@ function ExplorePage() {
                   ) : (
                     <Button
                       className="main-btn !w-fit"
-                      onClick={() => navigate(`/dashboard/course/${course.id}/lessons`)}
+                      onClick={() =>
+                        navigate(`/dashboard/course/${course.id}/lessons`)
+                      }
                     >
                       Go to the course
                     </Button>
@@ -110,7 +91,7 @@ function ExplorePage() {
         )}
       </div>
 
-      <EnrolledCoursesSidebar enrolledCourses={enrolledCourses} />
+      <EnrolledCoursesSidebar />
     </DashboardSection>
   );
 }
