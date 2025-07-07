@@ -13,7 +13,6 @@ const initialValues = {
   email: "",
   password: "",
   confirm_password: "",
-  // accept_terms: false,
 };
 
 function RegisterPage() {
@@ -29,7 +28,7 @@ function RegisterPage() {
 
   const onSubmit: SubmitHandler<RegisterFields> = async (data) => {
     try {
-      await new Promise((resolve, reject) => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       const res = await registerUser(data);
       toast.success(res.data.message);
     } catch (err: any) {
