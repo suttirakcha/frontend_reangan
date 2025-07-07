@@ -44,6 +44,7 @@ export type CourseState = {
   getCourses: () => Promise<void>;
   getEnrolledCourses: () => Promise<void>;
   enrollCourse: (courseId: number) => Promise<AxiosResponse>;
+  unenrollCourse: (courseId: number) => Promise<AxiosResponse>;
   getLessonsFromEnrolledCourse: (courseId: number) => Promise<void>;
 }
 

@@ -18,6 +18,11 @@ const useCourseStore = create<CourseState>()((set) => ({
     const res = await courseApi.post(`/${courseId}`, {}, addToken(token!));
     return res;
   },
+  unenrollCourse: async (courseId: number) => {
+    const { accessToken: token } = useUserStore.getState();
+    const res = await courseApi.delete(`/${courseId}`, addToken(token!));
+    return res;
+  },
   getEnrolledCourses: async () => {
     const { accessToken: token } = useUserStore.getState();
     const res = await courseApi.get(`/enrolled`, addToken(token!));
@@ -29,9 +34,9 @@ const useCourseStore = create<CourseState>()((set) => ({
     const data = {
       title: res.data.title,
       description: res.data.description,
-      lessons: res.data.lessons
-    }
-    set({ currentCourse: data, loading: false })
+      lessons: res.data.lessons,
+    };
+    set({ currentCourse: data, loading: false });
   },
 }));
 
