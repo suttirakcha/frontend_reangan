@@ -1,6 +1,5 @@
-import DashboardSection from "@/components/custom/DashboardSection";
-import DeleteAccountDialog from "@/components/custom/DeleteAccountDialog";
-import EnrolledCoursesSidebar from "@/components/custom/EnrolledCoursesSidebar";
+import DashboardSection from "@/components/dashboard/DashboardSection";
+import DeleteAccountDialog from "@/components/custom/dialogs/DeleteAccountDialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { type UserFields, userSchema } from "@/schemas/userSchema";
