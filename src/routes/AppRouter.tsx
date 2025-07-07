@@ -30,7 +30,11 @@ function AppRouter() {
   }
 
   return (
-    <Suspense fallback={<Loading />}>
+    <Suspense fallback={
+      <div className="flex items-center justify-center h-screen w-screen">
+        <Loading />
+      </div>
+    }>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={publicRouter(<MainLayout />)}>
@@ -39,6 +43,7 @@ function AppRouter() {
             <Route path="register" element={<RegisterPage />} />
             <Route path="*" element={<h1>404 NOT FOUND</h1>}/>
           </Route>
+
           <Route path="/dashboard" element={protectedRouter(<DashboardLayout />)}>
             <Route index element={<MainPage />} />
             <Route path="explore" element={<ExplorePage />} />
@@ -47,6 +52,7 @@ function AppRouter() {
             <Route path="course/:courseId/lessons" element={<LessonPage />} />
             <Route path="*" element={<h1>404 NOT FOUND</h1>}/>
           </Route>
+
           <Route path="/quiz" element={protectedRouter(<QuizLayout />)}>
             <Route index element={<QuizPage />}/>
           </Route>
