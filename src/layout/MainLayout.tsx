@@ -1,12 +1,11 @@
 import { Outlet, useLocation } from "react-router-dom";
 import Header from "../components/custom/Header";
-import { cn } from "@/lib/utils";
+import { checkIfAuthPage, cn } from "@/lib/utils";
+import Footer from "@/components/custom/Footer";
 
 function MainLayout() {
   const location = useLocation();
-  const isAuthPage =
-    location.pathname.includes("/login") ||
-    location.pathname.includes("/register");
+  const isAuthPage = checkIfAuthPage(location.pathname);
 
   return (
     <main>
@@ -19,6 +18,7 @@ function MainLayout() {
       >
         <Outlet />
       </div>
+      {!isAuthPage && <Footer />}
     </main>
   );
 }

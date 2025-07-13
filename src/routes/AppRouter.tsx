@@ -3,11 +3,15 @@ import { lazy, Suspense, type ReactNode } from "react";
 import Loading from "@/components/custom/Loading";
 import useUserStore from "@/stores/useUserStore";
 
+// Public components
 const MainLayout = lazy(() => import("@/layout/MainLayout"));
 const LoginPage = lazy(() => import("@/pages/LoginPage"));
 const RegisterPage = lazy(() => import("@/pages/RegisterPage"));
 const HomePage = lazy(() => import("@/pages/HomePage"));
+const ForgotPasswordPage = lazy(() => import("@/pages/ForgotPasswordPage"));
+const ResetPasswordPage = lazy(() => import("@/pages/ResetPasswordPage"));
 
+// Dashboard components
 const DashboardLayout = lazy(() => import("@/layout/DashboardLayout"));
 const MainPage = lazy(() => import("@/pages/dashboard/MainPage"));
 const ExplorePage = lazy(() => import("@/pages/dashboard/ExplorePage"));
@@ -15,18 +19,18 @@ const ProfilePage = lazy(() => import("@/pages/dashboard/ProfilePage"));
 const SettingsPage = lazy(() => import("@/pages/dashboard/SettingsPage"));
 const LessonPage = lazy(() => import("@/pages/dashboard/LessonPage"));
 
+// Quiz components
 const QuizLayout = lazy(() => import("@/layout/QuizLayout"));
 const QuizPage = lazy(() => import("@/pages/quiz/QuizPage"))
 
 function AppRouter() {
   const user = useUserStore(state => state.user);
-
   const publicRouter = (children: ReactNode) => {
-    return !user ? children : <Navigate to="/dashboard" />
+    return !user ? children : <Navigate to="/dashboard" replace />
   }
 
   const protectedRouter = (children: ReactNode) => {
-    return user ? children : <Navigate to="/" />
+    return user ? children : <Navigate to="/" replace />
   }
 
   return (
@@ -41,6 +45,8 @@ function AppRouter() {
             <Route index element={<HomePage />} />
             <Route path="login" element={<LoginPage />} />
             <Route path="register" element={<RegisterPage />} />
+            <Route path="forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="reset-password/:token" element={<ResetPasswordPage />} />
             <Route path="*" element={<h1>404 NOT FOUND</h1>}/>
           </Route>
 
@@ -53,7 +59,7 @@ function AppRouter() {
             <Route path="*" element={<h1>404 NOT FOUND</h1>}/>
           </Route>
 
-          <Route path="/quiz" element={protectedRouter(<QuizLayout />)}>
+          <Route path="/course/:courseId/lesson/:lessonId/quiz/:quizId" element={protectedRouter(<QuizLayout />)}>
             <Route index element={<QuizPage />}/>
           </Route>
         </Routes>

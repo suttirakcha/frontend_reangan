@@ -3,10 +3,10 @@ import { registerSchema, type RegisterFields } from "../schemas/registerSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import BackToHomeBtn from "@/components/custom/BackToHomeBtn";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import useUserStore from "@/stores/useUserStore";
+import BackBtn from "@/components/custom/BackBtn";
 
 const initialValues = {
   username: "",
@@ -20,6 +20,7 @@ function RegisterPage() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<RegisterFields>({
     defaultValues: initialValues,
@@ -33,6 +34,8 @@ function RegisterPage() {
       toast.success(res.data.message);
     } catch (err: any) {
       toast.error(err.response?.data?.message)
+    } finally {
+      reset();
     }
   };
 
@@ -41,7 +44,7 @@ function RegisterPage() {
       onSubmit={handleSubmit(onSubmit)}
       className="max-w-[500px] mx-auto flex flex-col gap-4 p-5 w-full h-[80vh] anim-fade"
     >
-      <BackToHomeBtn className="justify-center" />
+      <BackBtn className="justify-center" text="Back to Homepage" />
       <h1 className="title text-center mb-6">Register to start learning</h1>
       <label className="flex flex-col w-full gap-1">
         Username

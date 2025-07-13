@@ -3,7 +3,7 @@ import { z } from "zod";
 export const lessonSchema = z.object({
   id: z.number(),
   question: z.string(),
-  correct_choice: z.number(),
+  correct_answer: z.string(),
   choices: z.array(z.string())
 })
 

@@ -8,35 +8,41 @@ import {
   UserPen,
 } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 
-const menus = [
+interface DashboardSidebarProps {
+  className?: string;
+}
+
+function DashboardSidebar({ className } : DashboardSidebarProps) {
+  const { t } = useTranslation();
+  const sidebarLink = (link: string) => `/dashboard${link}`;
+  const user = useUserStore((state) => state.user);
+  const location = useLocation();
+
+  const menus = [
   {
-    text: "Home",
-    link: "/",
+    text: t("Home"),
+    link: "",
     icon: <LayoutDashboard />,
   },
   {
-    text: "Profile",
+    text: t("Profile"),
     link: "/profile",
     icon: <UserPen />,
   },
   {
-    text: "Explore",
+    text: t("Explore"),
     link: "/explore",
     icon: <BookOpen />,
   },
   {
-    text: "Settings",
+    text: t("Settings"),
     link: "/settings",
     icon: <Settings />,
   },
 ];
-
-function DashboardSidebar() {
-  const sidebarLink = (link: string) => `/dashboard${link}`;
-  const user = useUserStore((state) => state.user);
-  const location = useLocation();
 
   const greetingTexts = [
     "Welcome back",
@@ -49,9 +55,9 @@ function DashboardSidebar() {
   );
 
   return (
-    <nav className="h-dvh max-w-[300px] space-y-4 p-4 bg-orange-200 w-full content-box">
+    <nav className={cn("h-dvh max-w-[300px] space-y-4 p-4 bg-orange-200 w-full content-box", className)}>
       <h1 className="text-center text-4xl font-bold text-orange-500">
-        ReanGan
+        {t("ReanGan")}
       </h1>
       <div className="bg-orange-50 w-full px-4 py-3 rounded-full flex items-center gap-2">
         <UserCircle className="w-8 h-8" />

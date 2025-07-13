@@ -126,12 +126,21 @@
   body {
     @apply bg-background text-foreground;
   }
-  .anim-fade {
-    animation: fade-in 1s
+  .anim-fade-out-fast {
+    animation: fade-out .5s;
+    animation-delay: 1.5s;
   }
-
+  .anim-fade {
+    animation: fade-in 1s forwards;
+  }
+  .anim-fade-fast {
+    animation: fade-in .3s forwards;
+  }
   .anim-loading {
     animation: loading-anim .8s infinite;
+  }
+  .anim-skip-question {
+    animation: skip-question-anim 2s;
   }
 }
 
@@ -144,11 +153,15 @@
 }
 
 .title-xl {
-  @apply text-5xl font-bold leading-15;
+  @apply text-4xl leading-12 lg:text-5xl font-bold lg:leading-15;
 }
 
 .title {
   @apply text-3xl font-bold leading-10;
+}
+
+.title-sm {
+  @apply text-2xl font-bold leading-10;
 }
 
 .loading-circle {
@@ -164,6 +177,15 @@
   }
 }
 
+@keyframes fade-out {
+  0% {
+    opacity:1
+  }
+  100% {
+    opacity:0
+  }
+}
+
 @keyframes loading-anim {
   0% {
     transform:scale(1);
@@ -175,6 +197,25 @@
   }
   100% {
     transform:scale(1);
+    opacity:1;
+  }
+}
+
+@keyframes skip-question-anim {
+  0% {
+    transform: translateX(0);
+    opacity:1;
+  }
+  25% {
+    transform: translateX(-50px);
+    opacity:0;
+  }
+  75% {
+    transform: translateX(50px);
+    opacity:0;
+  }
+  100% {
+    transform: translateX(0);
     opacity:1;
   }
 }

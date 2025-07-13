@@ -8,33 +8,50 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { DialogClose } from "@radix-ui/react-dialog";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import useCourseStore from "@/stores/useCourseStore";
 
-interface DeleteAccountDialogProps {
-  onConfirm: () => void;
+interface UnenrollDialogProps {
+  courseId: number;
 }
 
-function UnenrollDialog({ onConfirm } : DeleteAccountDialogProps) {
-  const [openModal, setOpenModal] = useState(false);
+function UnenrollDialog({ courseId }: UnenrollDialogProps) {
+  const navigate = useNavigate();
+  const { unenrollCourse } = useCourseStore();
+  const handleUnenroll = async (courseId: number) => {
+    try {
+      const res = await unenrollCourse(courseId);
+      toast.success(res.data.message);
+      navigate("/dashboard/explore");
+    } catch (err: any) {
+      toast.error(err.response?.data.message || err.message);
+    }
+  };
   return (
-    <Dialog onOpenChange={setOpenModal} open={openModal}>
-      <DialogTrigger>
+    <Dialog>
+      <DialogTrigger asChild>
         <Button variant="destructive">Unenroll</Button>
       </DialogTrigger>
       <DialogContent showCloseButton={false}>
         <DialogHeader>
           <DialogTitle>Unenroll this course?</DialogTitle>
           <DialogDescription>
-            NOTE: You will no longer access this course until you enroll it again.
+            NOTE: You will no longer access this course until you enroll it
+            again.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button variant="destructive" onClick={onConfirm}>
+          <Button
+            variant="destructive"
+            onClick={() => handleUnenroll(courseId)}
+          >
             Unenroll
           </Button>
-          <Button variant="ghost" onClick={() => setOpenModal(false)}>
-            Cancel
-          </Button>
+          <DialogClose asChild>
+            <Button variant="ghost">Cancel</Button>
+          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>

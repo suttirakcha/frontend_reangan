@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const registerSchema = z
   .object({
-    username: z.string().nonempty("Username is required"),
+    username: z.string().max(20, "Username cannot be more than 20 characters").nonempty("Username is required"),
     email: z.string().nonempty("Email is required").email("Invalid email"),
     password: z.string().nonempty("Password is required"),
     confirm_password: z.string().nonempty("Confirm password is required"),

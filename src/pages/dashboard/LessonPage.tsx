@@ -1,35 +1,45 @@
 import DashboardSection from "@/components/dashboard/DashboardSection";
 import UnenrollDialog from "@/components/custom/dialogs/UnenrollDialog";
 import Loading from "@/components/custom/Loading";
-import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardAction,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import useCourseStore from "@/stores/useCourseStore";
-import { ChevronLeftCircle } from "lucide-react";
 import { useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { toast } from "sonner";
+import { useNavigate, useParams } from "react-router-dom";
+import BackBtn from "@/components/custom/BackBtn";
+import useQuizStore from "@/stores/useQuizStore";
+import useUserStore from "@/stores/useUserStore";
+import QuizCard from "@/components/dashboard/QuizCard";
+import { useTranslation } from "react-i18next";
 
 function LessonPage() {
+  const { t } = useTranslation();
   const { courseId } = useParams();
   const navigate = useNavigate();
-  const currentCourse = useCourseStore((state) => state.currentCourse);
-  const getLessonsFromEnrolledCourse = useCourseStore(
-    (state) => state.getLessonsFromEnrolledCourse
-  );
-  const loading = useCourseStore((state) => state.loading);
-  const unenrollCourse = useCourseStore((state) => state.unenrollCourse);
+
+  const { currentCourse, getLessonsFromEnrolledCourse, loading } =
+    useCourseStore();
+
+  const user = useUserStore((state) => state.user);
+
+  const { getCurrentQuiz, finishedQuizzes, getFinishedQuizzes } =
+    useQuizStore();
 
   useEffect(() => {
     if (!currentCourse) {
       getLessonsFromEnrolledCourse(Number(courseId));
     }
-  }, []);
+
+    const fetchQuizzes = async () => {
+      await getFinishedQuizzes();
+    };
+
+    fetchQuizzes();
+  }, [currentCourse, finishedQuizzes]);
 
   if (loading) {
     return <Loading />;
@@ -39,15 +49,15 @@ function LessonPage() {
     return;
   }
 
-  const handleUnenroll = async (courseId: number) => {
-    try {
-      const res = await unenrollCourse(courseId);
-      toast.success(res.data.message);
-      navigate("/dashboard/explore")
-    } catch (err: any) {
-      toast.error(err.response?.data.error || err.message);
-    }
-  }
+  const handleStartQuiz = async (
+    courseId: number,
+    lessonId: number,
+    quizId: number
+  ) => {
+    await getCurrentQuiz(courseId, lessonId, quizId);
+    if (getCurrentQuiz!)
+      navigate(`/course/${courseId}/lesson/${lessonId}/quiz/${quizId}`);
+  };
 
   return (
     <DashboardSection
@@ -56,14 +66,8 @@ function LessonPage() {
     >
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <Link
-            to="/dashboard/explore"
-            className="flex items-center gap-2 w-fit"
-          >
-            <ChevronLeftCircle />
-            Back to Course
-          </Link>
-          <UnenrollDialog onConfirm={() => handleUnenroll(+courseId!)}/>
+          <BackBtn text={t("Back to Courses")} link="/dashboard/explore" />
+          <UnenrollDialog courseId={+courseId!} />
         </div>
         {currentCourse.lessons.map((lesson, index) => {
           const { quizzes } = lesson;
@@ -71,23 +75,30 @@ function LessonPage() {
             <div className="flex items-center gap-4" key={lesson.id}>
               <Card className="w-full max-w-[280px]" key={index}>
                 <CardHeader>
-                  <p className="text-sm font-medium">Chapter {index + 1}: </p>
+                  <p className="text-sm font-medium">{t("Chapter")} {index + 1}: </p>
                   <CardTitle className="text-xl">{lesson.title}</CardTitle>
                   <CardDescription>{lesson.description}</CardDescription>
                 </CardHeader>
               </Card>
               <div className="w-full flex flex-1 gap-4 overflow-auto">
-                {quizzes.map((quiz) => (
-                  <div key={quiz.id} className="bg-orange-200 p-5 rounded-4xl min-w-[280px] flex flex-col gap-4">
-                    <h2 className="text-2xl font-medium">{quiz.title}</h2>
-                    <Button
-                      className="main-btn w-fit"
-                      onClick={() => navigate("/quiz")}
-                    >
-                      Start
-                    </Button>
-                  </div>
-                ))}
+                {quizzes.map((quiz) => {
+                  const finishedIndex = finishedQuizzes.findIndex(
+                    (q: any) =>
+                      q.userId === user?.id &&
+                      q.courseId === +courseId! &&
+                      q.quizId === +quiz.id!
+                  );
+                  return (
+                    <QuizCard
+                      key={quiz.id}
+                      title={quiz.title}
+                      index={finishedIndex}
+                      onStartQuiz={() =>
+                        handleStartQuiz(+courseId!, +lesson.id!, +quiz.id!)
+                      }
+                    />
+                  );
+                })}
               </div>
             </div>
           );

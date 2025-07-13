@@ -10,3 +10,5 @@ export const getApi = (url: string) => {
 export const authApi = getApi("/auth");
 export const userApi = getApi("/users");
 export const courseApi = getApi("/courses");
+export const quizApi = getApi("/quiz")
+export const statApi = getApi("/statistics")
