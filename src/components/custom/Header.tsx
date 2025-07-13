@@ -1,11 +1,10 @@
-import { cn } from "@/lib/utils";
+import { checkIfAuthPage, cn } from "@/lib/utils";
 import { Link, useLocation } from "react-router-dom";
 
 function Header() {
   const location = useLocation();
-  const isAuthPage =
-    location.pathname.includes("/login") ||
-    location.pathname.includes("/register");
+  const isAuthPage = checkIfAuthPage(location.pathname);
+
   return (
     <header
       className={cn(

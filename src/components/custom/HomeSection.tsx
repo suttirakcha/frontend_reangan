@@ -17,7 +17,7 @@ interface HomeSectionProps extends ImageSectionProps {
 function ImageSection({ imgSrc, imgSide, imgClassName }: ImageSectionProps) {
   return (
     <div
-      className={cn("flex", {
+      className={cn("flex max-md:justify-center", {
         "justify-end": imgSide === "right",
         "justify-start": imgSide === "left",
       })}
@@ -37,7 +37,7 @@ function HomeSection({
 }: HomeSectionProps) {
   return (
     <section className={className}>
-      <div className="grid lg:grid-cols-2 items-center p-12 pb-0 mx-auto max-w-[1300px]">
+      <div className="flex flex-col max-lg:gap-12 lg:grid lg:grid-cols-2 items-center p-12 pb-0 mx-auto max-w-[1300px]">
         {imgSide === "left" && (
           <ImageSection
             imgSrc={imgSrc}
@@ -46,7 +46,7 @@ function HomeSection({
           />
         )}
         <div
-          className={cn("flex flex-col gap-8", {
+          className={cn("flex flex-col gap-8 max-md:text-center", {
             "text-end": imgSide === "left",
             "text-start": imgSide === "right",
           })}
