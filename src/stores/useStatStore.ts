@@ -14,7 +14,11 @@ const useStatStore = create<StatisticsState>()((set, get) => ({
   },
   createStatistics: async () => {
     const token = useUserStore.getState().accessToken;
-    const res = await statApi.post("/", {}, addToken(token!));
+    const res = await statApi.post("/", {
+      exp: 0,
+      incorrect_answered: 0,
+      correct_answered: 0
+    }, addToken(token!));
     set({ statistics: res.data.statistics });
   },
   updateExp: async (data: Statistics) => {

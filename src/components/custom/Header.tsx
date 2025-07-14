@@ -1,7 +1,10 @@
 import { checkIfAuthPage, cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 function Header() {
+  const { t } = useTranslation();
   const location = useLocation();
   const isAuthPage = checkIfAuthPage(location.pathname);
 
@@ -17,8 +20,9 @@ function Header() {
           ReanGan
         </Link>
         <div className="flex items-center gap-6">
-          <Link to="/login" className="hover:opacity-80">Login</Link>
-          <Link to="/register" className="hover:opacity-80">Register</Link>
+          <Link to="/login" className="hover:opacity-80">{t("Login")}</Link>
+          <Link to="/register" className="hover:opacity-80">{t("Register")}</Link>
+          <LanguageSwitcher className="flex items-center gap-2"/>
         </div>
       </nav>
     </header>

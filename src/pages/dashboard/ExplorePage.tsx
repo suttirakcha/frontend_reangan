@@ -23,11 +23,11 @@ function ExplorePage() {
   const handleEnrollCourse = async (id: number) => {
     try {
       const res = await enrollCourse(id);
-      toast.success(res.data.message);
+      toast.success(t(res.data.message));
       getCourses();
       getEnrolledCourses();
     } catch (err: any) {
-      toast.error(err.response?.data.message || err.message);
+      toast.error(t(err.response?.data.message || err.message));
     }
   };
 

@@ -39,7 +39,7 @@ const useUserStore = create<UserState>()(
         return res;
       },
       resetPassword: async (data: ResetPasswordFields, token: string) => {
-        const res = await authApi.post(`/reset-password/${token}`, data);
+        const res = await authApi.patch(`/reset-password/${token}`, data);
         set({ resetPasswordToken: null });
         return res;
       }

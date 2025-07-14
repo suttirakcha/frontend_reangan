@@ -1,12 +1,13 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { registerSchema, type RegisterFields } from "../schemas/registerSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import useUserStore from "@/stores/useUserStore";
 import BackBtn from "@/components/custom/BackBtn";
+import { useTranslation } from "react-i18next";
 
 const initialValues = {
   username: "",
@@ -16,6 +17,8 @@ const initialValues = {
 };
 
 function RegisterPage() {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
   const registerUser = useUserStore(state => state.register);
   const {
     register,
@@ -31,9 +34,10 @@ function RegisterPage() {
     try {
       await new Promise((resolve) => setTimeout(resolve, 2000));
       const res = await registerUser(data);
-      toast.success(res.data.message);
+      toast.success(t(res.data.message));
+      navigate("/login")
     } catch (err: any) {
-      toast.error(err.response?.data?.message)
+      toast.error(t(err.response?.data?.message))
     } finally {
       reset();
     }
@@ -44,48 +48,48 @@ function RegisterPage() {
       onSubmit={handleSubmit(onSubmit)}
       className="max-w-[500px] mx-auto flex flex-col gap-4 p-5 w-full h-[80vh] anim-fade"
     >
-      <BackBtn className="justify-center" text="Back to Homepage" />
-      <h1 className="title text-center mb-6">Register to start learning</h1>
+      <BackBtn className="justify-center" text={t("Back to Homepage")} />
+      <h1 className="title text-center mb-6">{t("Register to start learning")}</h1>
       <label className="flex flex-col w-full gap-1">
-        Username
-        <Input {...register("username")}placeholder="Enter your username" />
+        {t("Username")}
+        <Input {...register("username")}placeholder={t("Enter your username")} />
         {errors.username && (
-          <p className="text-red-500 text-sm">{errors.username?.message}</p>
+          <p className="text-red-500 text-sm">{t(errors.username?.message!)}</p>
         )}
       </label>
       <label className="flex flex-col w-full gap-1">
-        Email
-        <Input {...register("email")} placeholder="Enter your email" />
+        {t("Email")}
+        <Input {...register("email")} placeholder={t("Enter your email")} />
         {errors.email && (
-          <p className="text-red-500 text-sm">{errors.email?.message}</p>
+          <p className="text-red-500 text-sm">{t(errors.email?.message!)}</p>
         )}
       </label>
       <label className="flex flex-col w-full gap-1">
-        Password
-        <Input type="password" {...register("password")} placeholder="Enter your password" />
+        {t("Password")}
+        <Input type="password" {...register("password")} placeholder={t("Enter your password")} />
         {errors.password && (
-          <p className="text-red-500 text-sm">{errors.password?.message}</p>
+          <p className="text-red-500 text-sm">{t(errors.password?.message!)}</p>
         )}
       </label>
       <label className="flex flex-col w-full gap-1">
-        Confirm password
-        <Input type="password" {...register("confirm_password")} placeholder="Enter your confirm password" />
+        {t("Confirm password")}
+        <Input type="password" {...register("confirm_password")} placeholder={t("Enter your confirm password")} />
         {errors.confirm_password && (
           <p className="text-red-500 text-sm">
-            {errors.confirm_password?.message}
+            {t(errors.confirm_password?.message!)}
           </p>
         )}
       </label>
 
       <p className="text-center">
-        Already have an account?{" "}
+        {t("Already have an account?")}{" "}
         <Link to="/login" className="text-orange-500 hover:underline">
-          Login
+          {t("Login")}
         </Link>
       </p>
 
       <Button disabled={isSubmitting} className="main-btn">
-        {isSubmitting ? "Registering..." : "Register"}
+        {t(isSubmitting ? "Registering..." : "Register")}
       </Button>
     </form>
   );

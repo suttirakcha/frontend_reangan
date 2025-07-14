@@ -1,5 +1,6 @@
 import Loading from "@/components/custom/Loading";
 import AnswerChoice from "@/components/quiz/AnswerChoice";
+import AnswerTyping from "@/components/quiz/AnswerTyping";
 import QuizHeader from "@/components/quiz/QuizHeader";
 import StatisticsSection from "@/components/quiz/StatisticsSection";
 import { Button } from "@/components/ui/button";
@@ -49,11 +50,13 @@ function QuizPage() {
   const handleCompleteQuiz = async () => {
     try {
       completeQuiz(+courseId!, +lessonId!, +quizId!);
-      await updateExp({ 
+      await updateExp({
         exp: statistics?.exp! + calculatedExp,
-        correct_answered: statistics?.correct_answered || 0 + totalAnswered - incorrectAnsweredQuestions?.length,
-        incorrect_answered: statistics?.incorrect_answered || 0 + incorrectAnsweredQuestions?.length
-       });
+        correct_answered:
+          statistics?.correct_answered! + (totalAnswered - incorrectAnsweredQuestions?.length),
+        incorrect_answered:
+          statistics?.incorrect_answered! + incorrectAnsweredQuestions?.length,
+      });
     } catch (err: any) {
       console.log(err.response?.data.message || err.message);
     }
@@ -83,6 +86,7 @@ function QuizPage() {
     setCheckIfCorrect(true);
     if (isCorrect) {
       setTotalAnswered((prev) => prev + 1);
+      setCalculatedExp(10 - incorrectAnsweredQuestions?.length);
     }
     setTimeout(() => {
       if (!isCorrect && !incorrectAnsweredQuestions.includes(eachQuestion!)) {
@@ -96,7 +100,6 @@ function QuizPage() {
     return () => {
       setMyAnswer(item);
       setAnsweredChoice(index + 1);
-      setCalculatedExp(10 - incorrectAnsweredQuestions?.length);
     };
   };
 
@@ -135,26 +138,36 @@ function QuizPage() {
                   )}
                   key={question.id}
                 >
-                  <h1 className="title">{question.question}</h1>
-                  <div className="grid grid-cols-2 gap-4">
-                    {answers.map((answer, index) => {
-                      const isAnswered = answeredChoice === index + 1;
-                      return (
-                        <AnswerChoice
-                          key={index + 1}
-                          isAnswered={isAnswered}
-                          isCorrect={
-                            checkIfCorrect && answer === question.correct_answer
-                          }
-                          isIncorrect={
-                            isAnswered && checkIfCorrect && !isCorrect
-                          }
-                          answer={answer}
-                          onAnswer={handleAnswer(answer, index)}
-                        />
-                      );
-                    })}
-                  </div>
+                  {question.question_type === "multiple_choice" ? (
+                    <>
+                      <h1 className="title">{question.question}</h1>
+                      <div className="grid grid-cols-2 gap-4">
+                        {answers?.map((answer, index) => {
+                          const isAnswered = answeredChoice === index + 1;
+                          return (
+                            <AnswerChoice
+                              key={index + 1}
+                              isAnswered={isAnswered}
+                              isCorrect={
+                                checkIfCorrect &&
+                                answer === question.correct_answer
+                              }
+                              isIncorrect={
+                                isAnswered && checkIfCorrect && !isCorrect
+                              }
+                              answer={answer}
+                              onAnswer={handleAnswer(answer, index)}
+                            />
+                          );
+                        })}
+                      </div>
+                    </>
+                  ) : (
+                    <AnswerTyping
+                      question={question.question}
+                      onChange={e => setMyAnswer(e.target.value)}
+                    />
+                  )}
 
                   <Button
                     disabled={checkIfCorrect || !myAnswer}

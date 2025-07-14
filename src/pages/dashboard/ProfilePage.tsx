@@ -46,14 +46,14 @@ function ProfilePage() {
           {t("Username")}
           <Input {...register("username")} placeholder={t("Enter your username")} />
           {errors.username && (
-            <p className="text-red-500 text-sm">{errors.username?.message}</p>
+            <p className="text-red-500 text-sm">{t(errors.username?.message!)}</p>
           )}
         </label>
         <label className="flex flex-col w-full gap-1">
           {t("Email")}
           <Input {...register("email")} placeholder={t("Enter your email")} />
           {errors.email && (
-            <p className="text-red-500 text-sm">{errors.email?.message}</p>
+            <p className="text-red-500 text-sm">{t(errors.email?.message!)}</p>
           )}
         </label>
         <label className="flex flex-col w-full gap-1">
@@ -67,7 +67,7 @@ function ProfilePage() {
           />
           {errors.current_password && (
             <p className="text-red-500 text-sm">
-              {errors.current_password?.message}
+              {t(errors.current_password?.message!)}
             </p>
           )}
         </label>
@@ -82,7 +82,7 @@ function ProfilePage() {
           />
           {errors.new_password && (
             <p className="text-red-500 text-sm">
-              {errors.new_password?.message}
+              {t(errors.new_password?.message!)}
             </p>
           )}
         </label>

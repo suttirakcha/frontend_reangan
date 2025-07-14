@@ -144,6 +144,10 @@
   }
 }
 
+.dash-border {
+  @apply shadow-md shadow-orange-100 border border-orange-500 rounded-lg p-6
+}
+
 .main-btn {
   @apply text-base h-10 bg-orange-500 hover:bg-orange-400 cursor-pointer text-white rounded-lg;
 }

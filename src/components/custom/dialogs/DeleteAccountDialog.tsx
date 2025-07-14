@@ -23,10 +23,10 @@ function DeleteAccountDialog() {
     try {
       await new Promise((resolve) => setTimeout(resolve, 2000));
       const res = await deleteUser();
-      toast.success(res.data.message);
+      toast.success(t(res.data.message));
       logout();
     } catch (err: any) {
-      toast.error(err.response?.data.message || err.message);
+      toast.error(t(err.response?.data.message || err.message));
     } finally {
       setIsDeleting(false);
     }
@@ -39,10 +39,12 @@ function DeleteAccountDialog() {
       </DialogTrigger>
       <DialogContent showCloseButton={false}>
         <DialogHeader>
-          <DialogTitle>Are you sure to delete your account?</DialogTitle>
+          <DialogTitle>{t("Are you sure to delete your account?")}</DialogTitle>
           <DialogDescription>
-            NOTE: This action cannot be undone. This will permanently delete
-            your account and remove your data from our servers.
+            {t("NOTE")}:{" "}
+            {t(
+              "This action cannot be undone. This will permanently delete your account and remove your data from our servers."
+            )}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
@@ -51,12 +53,10 @@ function DeleteAccountDialog() {
             disabled={isDeleting}
             onClick={handleDeleteAccount}
           >
-            {isDeleting ? "Deleting..." : "Sure, delete my account"}
+            {t(isDeleting ? "Deleting..." : "Sure, delete my account")}
           </Button>
           <DialogClose asChild>
-            <Button variant="ghost">
-              Cancel
-            </Button>
+            <Button variant="ghost">{t("Cancel")}</Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

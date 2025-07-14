@@ -10,40 +10,54 @@ import useUserStore from "@/stores/useUserStore";
 import { useTranslation } from "react-i18next";
 
 function MainPage() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const quote = quotes[Math.floor(Math.random() * quotes.length)];
   const user = useUserStore((state) => state.user);
-  const enrolledCourse = useCourseStore((state) => state.enrolledCourses);
-  const getEnrolledCourses = useCourseStore(
-    (state) => state.getEnrolledCourses
-  );
-  
-  const finishedQuizzes = useQuizStore((state) => state.finishedQuizzes);
-  const getFinishedQuizzes = useQuizStore((state) => state.getFinishedQuizzes);
 
-  const [courseIndex, setCourseIndex] = useState(0);
+  const { clearCourse, enrolledCourses, getEnrolledCourses } = useCourseStore();
+  const { finishedQuizzes, getFinishedQuizzes } = useQuizStore();
+
+  const findRecentFinishedQuiz = finishedQuizzes.map((quiz) =>
+    Date.parse(quiz.finishedAt)
+  );
+
+  const recent = finishedQuizzes?.find(
+    (quiz) =>
+      Date.parse(quiz.finishedAt) === Math.max(...findRecentFinishedQuiz) &&
+      quiz.userId === user?.id
+  )?.courseId;
+
+  const currentCourseIndex = enrolledCourses?.findIndex(
+    (course) => course.id === recent
+  );
+
+  const [courseIndex] = useState(
+    currentCourseIndex === -1 ? 0 : currentCourseIndex
+  );
 
   useEffect(() => {
+    clearCourse();
     getFinishedQuizzes();
     getEnrolledCourses();
   }, []);
 
-  const totalQuizzes = enrolledCourse
-    ? enrolledCourse[courseIndex]?.lessons?.reduce(
+  const totalQuizzes = enrolledCourses
+    ? enrolledCourses[courseIndex]?.lessons?.reduce(
         (acc: any, curr: any) => acc + curr.quizzes.length,
         0
       )
     : 0;
-  const totalFinishedQuizzes = enrolledCourse
+
+  const totalFinishedQuizzes = enrolledCourses
     ? finishedQuizzes.filter(
         (quiz: any) =>
           quiz.userId === user?.id &&
-          quiz.courseId === enrolledCourse[courseIndex]?.id
+          quiz.courseId === enrolledCourses[courseIndex]?.id
       ).length
     : 0;
 
-  const completedQuizPercentage = enrolledCourse
-    ? ((totalFinishedQuizzes / totalQuizzes) * 100)
+  const completedQuizPercentage = enrolledCourses
+    ? (totalFinishedQuizzes / totalQuizzes) * 100
     : 0;
 
   return (
@@ -54,24 +68,24 @@ function MainPage() {
     >
       <div className="grid grid-cols-3 gap-12">
         <div className="col-span-2 flex flex-col gap-4">
-          <div className="border border-orange-500 rounded-md w-full p-6 flex flex-col gap-4">
+          <div className="dash-border w-full flex flex-col gap-4">
             <p className="text-xl font-medium text-center">{quote.text}</p>
             <p className="text-gray-500 text-end">{quote.author}</p>
           </div>
-          <h2 className="title-sm">Current progress</h2>
-          <div className="border border-orange-500 rounded-md w-full p-6 flex flex-col gap-4">
-            {enrolledCourse ? (
+          <h2 className="title-sm">{t("Current progress")}</h2>
+          <div className="dash-border w-full flex flex-col gap-4">
+            {enrolledCourses ? (
               <div className="space-y-4">
                 <div className="flex items-center gap-4">
                   <p className="text-xl font-medium">
-                    {enrolledCourse[courseIndex]?.title} {" "}
-                    ({completedQuizPercentage.toFixed(0)}%)
+                    {enrolledCourses[courseIndex]?.title} (
+                    {completedQuizPercentage.toFixed(0)}%)
                   </p>
                   <Link
-                    to={`/dashboard/course/${enrolledCourse[courseIndex]?.id}/lessons`}
+                    to={`/dashboard/course/${enrolledCourses[courseIndex]?.id}/lessons`}
                     className="text-sm text-orange-500 hover:text-orange-400"
                   >
-                    Continue
+                    {t("Continue")}
                   </Link>
                 </div>
                 <Progress
@@ -80,7 +94,9 @@ function MainPage() {
                 />
               </div>
             ) : (
-              <p>Let's explore the courses you might be interested in!</p>
+              <p>
+                {t("Let's explore the courses you might be interested in!")}
+              </p>
             )}
           </div>
         </div>

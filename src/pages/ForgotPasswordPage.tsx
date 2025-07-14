@@ -9,18 +9,18 @@ import { useState } from "react";
 
 function ForgotPasswordPage() {
   const { register, handleSubmit, formState } = useForm<ForgotPasswordFields>();
-  const { errors, isSubmitting } = formState;
+  const [errorText, setErrorText] = useState("");
+  const { errors, isSubmitting, isSubmitSuccessful } = formState;
 
-  const [requestLink, setRequestLink] = useState("");
   const requestForgotPassword = useUserStore(state => state.requestForgotPassword);
 
   const onSubmit = async (data: ForgotPasswordFields) => {
     try {
       const res = await requestForgotPassword(data);
       toast.success(res.data.message);
-      setRequestLink(`/reset-password/${res.data.resetPasswordToken}`);
+      setErrorText("");
     } catch (err: any){
-      toast.error(err.response?.data.message || err.message)
+      setErrorText(err.response?.data.message || err.message)
     }
   };
 
@@ -40,7 +40,8 @@ function ForgotPasswordPage() {
       </label>
 
       <p>You will receive the link to reset the password.</p>
-      {requestLink && <a href={requestLink}>Click here to reset password</a>}
+      {errorText && <p>{errorText}</p>}
+      {isSubmitSuccessful && !errorText && <p>Your request has sent to your email. Please check your email.</p>}
 
       <Button disabled={isSubmitting} className="main-btn">
         {isSubmitting ? "Submitting..." : "Submit"}

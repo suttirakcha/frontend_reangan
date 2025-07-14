@@ -3,7 +3,7 @@ import type { ChangeEvent } from "react";
 
 interface AnswerTypingProps {
   question: string;
-  onChange: (e: ChangeEvent) => void
+  onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void
 }
 
 function AnswerTyping({ question, onChange } : AnswerTypingProps) {

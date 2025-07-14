@@ -2,13 +2,14 @@ import type { PropsWithChildren } from "react";
 
 interface SettingsSectionProps {
   title: string;
+  className?: string;
 }
 
-function SettingsSection({ title, children }: PropsWithChildren<SettingsSectionProps>) {
+function SettingsSection({ title, className, children }: PropsWithChildren<SettingsSectionProps>) {
   return (
-    <div>
+    <div className="space-y-2">
       <h2 className="title-sm">{title}</h2>
-      <div>
+      <div className={className}>
         {children}
       </div>
     </div>

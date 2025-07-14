@@ -21,7 +21,9 @@ const LessonPage = lazy(() => import("@/pages/dashboard/LessonPage"));
 
 // Quiz components
 const QuizLayout = lazy(() => import("@/layout/QuizLayout"));
-const QuizPage = lazy(() => import("@/pages/quiz/QuizPage"))
+const QuizPage = lazy(() => import("@/pages/quiz/QuizPage"));
+
+const NotFoundPage = lazy(() => import("@/pages/NotFoundPage"));
 
 function AppRouter() {
   const user = useUserStore(state => state.user);
@@ -47,7 +49,7 @@ function AppRouter() {
             <Route path="register" element={<RegisterPage />} />
             <Route path="forgot-password" element={<ForgotPasswordPage />} />
             <Route path="reset-password/:token" element={<ResetPasswordPage />} />
-            <Route path="*" element={<h1>404 NOT FOUND</h1>}/>
+            <Route path="*" element={<NotFoundPage />}/>
           </Route>
 
           <Route path="/dashboard" element={protectedRouter(<DashboardLayout />)}>
@@ -56,7 +58,7 @@ function AppRouter() {
             <Route path="settings" element={<SettingsPage />} />
             <Route path="profile" element={<ProfilePage />} />
             <Route path="course/:courseId/lessons" element={<LessonPage />} />
-            <Route path="*" element={<h1>404 NOT FOUND</h1>}/>
+            <Route path="*" element={<NotFoundPage />}/>
           </Route>
 
           <Route path="/course/:courseId/lesson/:lessonId/quiz/:quizId" element={protectedRouter(<QuizLayout />)}>

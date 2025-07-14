@@ -65,6 +65,7 @@ export type CourseState = {
   enrollCourse: (courseId: number) => Promise<AxiosResponse>;
   unenrollCourse: (courseId: number) => Promise<AxiosResponse>;
   getLessonsFromEnrolledCourse: (courseId: number) => Promise<void>;
+  clearCourse: () => void;
 };
 
 export type QuizState = {
@@ -88,11 +89,14 @@ export type DataDetail = {
   description?: string;
 };
 
+export type QuestionType = "multiple_choice" | "typing"
+
 export type Question = {
   id?: number;
   question: string;
   correct_answer: string;
-  choices: string;
+  choices?: string;
+  question_type: QuestionType;
 };
 
 export type Quiz = {
@@ -105,6 +109,7 @@ export type FinishedQuiz = {
   userId: number;
   courseId: number;
   quizId: number;
+  finishedAt: string;
 };
 
 export type StatisticsID = {

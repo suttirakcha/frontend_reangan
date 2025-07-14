@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import useUserStore from "@/stores/useUserStore";
 import { toast } from "sonner";
 import BackBtn from "@/components/custom/BackBtn";
+import { useTranslation } from "react-i18next";
 
 const initialValues: LoginFields = {
   email: "",
@@ -14,6 +15,7 @@ const initialValues: LoginFields = {
 };
 
 function LoginPage() {
+  const { t } = useTranslation();
   const login = useUserStore((state) => state.login);
   const navigate = useNavigate();
   const {
@@ -32,10 +34,10 @@ function LoginPage() {
       const res = await login(data);
       if (res) {
         navigate("/dashboard");
-        toast.success(res.data.message);
+        toast.success(t(res.data.message));
       }
     } catch (err: any) {
-      toast.error(err.response?.data?.message);
+      toast.error(t(err.response?.data?.message));
     } finally {
       reset();
     }
@@ -46,42 +48,42 @@ function LoginPage() {
       onSubmit={handleSubmit(onSubmit)}
       className="max-w-[500px] mx-auto flex flex-col gap-4 p-5 w-full h-[80vh] anim-fade"
     >
-      <BackBtn className="justify-center" text="Back to Homepage" />
-      <h1 className="title text-center mb-6">Login to ReanGan</h1>
+      <BackBtn className="justify-center" text={t("Back to Homepage")} />
+      <h1 className="title text-center mb-6">{t("Login to ReanGan")}</h1>
       <label className="flex flex-col w-full gap-1">
-        Email
+        {t("Email")}
         <Input {...register("email")} placeholder="example@mail.com" />
         {errors.email && (
-          <p className="text-red-500 text-sm">{errors.email?.message}</p>
+          <p className="text-red-500 text-sm">{t(errors.email?.message!)}</p>
         )}
       </label>
       <label className="flex flex-col w-full gap-1">
-        Password
+        {t("Password")}
         <Input
           type="password"
           {...register("password")}
-          placeholder="Enter your password"
+          placeholder={t("Enter your password")}
         />
         {errors.password && (
-          <p className="text-red-500 text-sm">{errors.password?.message}</p>
+          <p className="text-red-500 text-sm">{t(errors.password?.message!)}</p>
         )}
       </label>
 
       <p className="text-center">
-        Don't have an account?{" "}
+        {t("Don't have an account?")}{" "}
         <Link to="/register" className="text-orange-500 hover:underline">
-          Register
+          {t("Register")}
         </Link>
       </p>
 
       <p className="text-center">
         <Link to="/forgot-password" className="text-orange-500 hover:underline">
-          Forgot Password?
+          {t("Forgot Password?")}
         </Link>
       </p>
 
       <Button disabled={isSubmitting} className="main-btn">
-        {isSubmitting ? "Logging in..." : "Login"}
+        {t(isSubmitting ? "Logging in..." : "Login")}
       </Button>
     </form>
   );

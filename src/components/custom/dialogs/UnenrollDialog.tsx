@@ -12,34 +12,38 @@ import { DialogClose } from "@radix-ui/react-dialog";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import useCourseStore from "@/stores/useCourseStore";
+import { useTranslation } from "react-i18next";
 
 interface UnenrollDialogProps {
   courseId: number;
 }
 
 function UnenrollDialog({ courseId }: UnenrollDialogProps) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { unenrollCourse } = useCourseStore();
   const handleUnenroll = async (courseId: number) => {
     try {
       const res = await unenrollCourse(courseId);
-      toast.success(res.data.message);
+      toast.success(t(res.data.message));
       navigate("/dashboard/explore");
     } catch (err: any) {
-      toast.error(err.response?.data.message || err.message);
+      toast.error(t(err.response?.data.message || err.message));
     }
   };
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="destructive">Unenroll</Button>
+        <Button variant="destructive">{t("Unenroll")}</Button>
       </DialogTrigger>
       <DialogContent showCloseButton={false}>
         <DialogHeader>
-          <DialogTitle>Unenroll this course?</DialogTitle>
+          <DialogTitle>{t("Unenroll this course?")}</DialogTitle>
           <DialogDescription>
-            NOTE: You will no longer access this course until you enroll it
-            again.
+            {t("NOTE")}:{" "}
+            {t(
+              "You will no longer access this course until you enroll it again."
+            )}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
@@ -47,10 +51,10 @@ function UnenrollDialog({ courseId }: UnenrollDialogProps) {
             variant="destructive"
             onClick={() => handleUnenroll(courseId)}
           >
-            Unenroll
+            {t("Unenroll")}
           </Button>
           <DialogClose asChild>
-            <Button variant="ghost">Cancel</Button>
+            <Button variant="ghost">{t("Cancel")}</Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

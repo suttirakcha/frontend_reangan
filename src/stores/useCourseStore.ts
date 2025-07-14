@@ -38,6 +38,9 @@ const useCourseStore = create<CourseState>()((set) => ({
     };
     set({ currentCourse: data, loading: false });
   },
+  clearCourse: () => {
+    set({ currentCourse: null })
+  }
 }));
 
 export default useCourseStore;

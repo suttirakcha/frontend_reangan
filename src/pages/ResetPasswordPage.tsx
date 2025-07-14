@@ -6,8 +6,10 @@ import { useForm } from "react-hook-form";
 import useUserStore from "@/stores/useUserStore";
 import { toast } from "sonner";
 import { Navigate, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 function ResetPasswordPage() {
+  const { t } = useTranslation();
   const { token } = useParams();
   const { register, handleSubmit, formState } = useForm<ResetPasswordFields>();
   const { errors, isSubmitting } = formState;
@@ -18,7 +20,7 @@ function ResetPasswordPage() {
   const onSubmit = async (data: ResetPasswordFields) => {
     try {
       const res = await resetPassword(data, resetPasswordToken!);
-      toast.success(res.data.message);
+      toast.success(t(res.data.message));
     } catch (err: any){
       toast.error(err.response?.data.message || err.message)
     }
