@@ -6,6 +6,7 @@ import {
 import DashboardSidebar from "./DashboardSidebar";
 import { Menu, UserCircle } from "lucide-react";
 import useUserStore from "@/stores/useUserStore";
+import AdminSidebar from "../admin/AdminSidebar";
 
 function DashboardHeader() {
   const user = useUserStore(state => state.user);
@@ -16,7 +17,7 @@ function DashboardHeader() {
           <Menu className="w-8 h-8 cursor-pointer" />
         </SheetTrigger>
         <SheetContent side="left" className="!max-w-[300px] border-0">
-          <DashboardSidebar />
+          {user?.role === "ADMIN" ? <AdminSidebar /> : <DashboardSidebar />}
         </SheetContent>
       </Sheet>
       <div className="h-10 rounded-full px-4 bg-orange-50 flex items-center gap-2">

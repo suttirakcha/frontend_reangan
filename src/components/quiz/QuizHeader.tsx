@@ -3,6 +3,7 @@ import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import useQuizStore from "@/stores/useQuizStore";
+import { useTranslation } from "react-i18next";
 
 interface QuizHeaderProps {
   courseId: number;
@@ -11,7 +12,8 @@ interface QuizHeaderProps {
   disabled?: boolean;
 }
 
-function QuizHeader({ progress, courseId, onSkip, disabled } : QuizHeaderProps) {
+function QuizHeader({ progress, courseId, onSkip, disabled }: QuizHeaderProps) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { clearQuiz } = useQuizStore();
 
@@ -29,10 +31,12 @@ function QuizHeader({ progress, courseId, onSkip, disabled } : QuizHeaderProps) 
         />
         <Progress value={progress} className="h-3.5" />
       </div>
-      <Button disabled={disabled} className="main-btn w-30" onClick={onSkip}>
-        <ChevronsRight className="!w-6 !h-6" />
-        Skip
-      </Button>
+      <div className="flex items-center gap-2">
+        <Button disabled={disabled} className="main-btn w-30" onClick={onSkip}>
+          <ChevronsRight className="!w-6 !h-6" />
+          {t("Skip")}
+        </Button>
+      </div>
     </header>
   );
 }

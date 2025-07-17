@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 function ProfilePage() {
   const { t } = useTranslation();
   const { user, updateUser, logout } = useUserStore();
-  const { register, formState, handleSubmit, reset } = useForm<UserFields>({
+  const { register, formState, handleSubmit } = useForm<UserFields>({
     defaultValues: {
       username: user?.username || "",
       email: user?.email || "",
@@ -26,7 +26,6 @@ function ProfilePage() {
     try {
       const res = await updateUser(data);
       toast.success(t(res.data.message));
-      reset();
     } catch (err: any) {
       toast.error(t(err.response?.data.message || err.message));
     }

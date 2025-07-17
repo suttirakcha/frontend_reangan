@@ -13,16 +13,14 @@ function ResetPasswordPage() {
   const { token } = useParams();
   const { register, handleSubmit, formState } = useForm<ResetPasswordFields>();
   const { errors, isSubmitting } = formState;
-
-  const resetPassword = useUserStore(state => state.resetPassword);
-  const resetPasswordToken = useUserStore(state => state.resetPasswordToken);
+  const { resetPassword, resetPasswordToken } = useUserStore();
 
   const onSubmit = async (data: ResetPasswordFields) => {
     try {
       const res = await resetPassword(data, resetPasswordToken!);
       toast.success(t(res.data.message));
     } catch (err: any){
-      toast.error(err.response?.data.message || err.message)
+      toast.error(t(err.response?.data.message || err.message))
     }
   };
 
@@ -35,18 +33,18 @@ function ResetPasswordPage() {
       onSubmit={handleSubmit(onSubmit)}
       className="max-w-[500px] mx-auto flex flex-col gap-4 p-5 w-full h-[80vh] anim-fade"
     >
-      <BackBtn className="justify-center" text="Back to Homepage" />
-      <h1 className="title text-center mb-6">Enter your new password?</h1>
+      <BackBtn className="justify-center" text={t("Back to Homepage")} />
+      <h1 className="title text-center mb-6">{t("Enter your new password")}</h1>
       <label className="flex flex-col w-full gap-1">
-        New password
-        <Input {...register("password")} type="password" />
+        {t("New password")}
+        <Input {...register("password")} type="password" placeholder={t("Enter your new password")} />
         {errors.password && (
-          <p className="text-red-500 text-sm">{errors.password?.message}</p>
+          <p className="text-red-500 text-sm">{t(errors.password?.message!)}</p>
         )}
       </label>
 
       <Button disabled={isSubmitting} className="main-btn">
-        {isSubmitting ? "Submitting..." : "Submit"}
+        {t(isSubmitting ? "Submitting..." : "Submit")}
       </Button>
     </form>
   );

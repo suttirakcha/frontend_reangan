@@ -1,6 +1,6 @@
 // This one will be used if the questions from the backend are broken
 
-const questions = [
+export const questions = [
   {
     id: "abc",
     question: "I ___ Mark.",

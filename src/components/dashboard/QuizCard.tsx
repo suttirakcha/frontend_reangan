@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 
 interface QuizCardProps {
   title: string;
@@ -8,6 +9,7 @@ interface QuizCardProps {
 }
 
 function QuizCard({ title, onStartQuiz, index }: QuizCardProps) {
+  const { t } = useTranslation();
   return (
     <div
       className={cn(
@@ -23,7 +25,7 @@ function QuizCard({ title, onStartQuiz, index }: QuizCardProps) {
         {title}
       </h2>
       <Button className="main-btn w-fit" onClick={onStartQuiz}>
-        Start
+        {t("Start")}
       </Button>
     </div>
   );

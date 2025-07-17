@@ -32,8 +32,10 @@ function LoginPage() {
     try {
       await new Promise((resolve) => setTimeout(resolve, 2000));
       const res = await login(data);
+
+      const { role } = res.data?.result;
       if (res) {
-        navigate("/dashboard");
+        navigate(role === "ADMIN" ? "/admin" : "/dashboard");
         toast.success(t(res.data.message));
       }
     } catch (err: any) {
@@ -78,7 +80,7 @@ function LoginPage() {
 
       <p className="text-center">
         <Link to="/forgot-password" className="text-orange-500 hover:underline">
-          {t("Forgot Password?")}
+          {t("Forgot password?")}
         </Link>
       </p>
 

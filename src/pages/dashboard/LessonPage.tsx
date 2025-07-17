@@ -75,7 +75,7 @@ function LessonPage() {
             <div className="flex items-center gap-4" key={lesson.id}>
               <Card className="w-full max-w-[280px]" key={index}>
                 <CardHeader>
-                  <p className="text-sm font-medium">{t("Chapter")} {index + 1}: </p>
+                  <p className="text-sm font-medium">{t("Chapter", {index: index + 1})}: </p>
                   <CardTitle className="text-xl">{lesson.title}</CardTitle>
                   <CardDescription>{lesson.description}</CardDescription>
                 </CardHeader>

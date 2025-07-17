@@ -1,3 +1,4 @@
+import SubmitReportDialog from "@/components/custom/dialogs/SubmitReportDialog";
 import Loading from "@/components/custom/Loading";
 import AnswerChoice from "@/components/quiz/AnswerChoice";
 import AnswerTyping from "@/components/quiz/AnswerTyping";
@@ -53,7 +54,8 @@ function QuizPage() {
       await updateExp({
         exp: statistics?.exp! + calculatedExp,
         correct_answered:
-          statistics?.correct_answered! + (totalAnswered - incorrectAnsweredQuestions?.length),
+          statistics?.correct_answered! +
+          (totalAnswered - incorrectAnsweredQuestions?.length),
         incorrect_answered:
           statistics?.incorrect_answered! + incorrectAnsweredQuestions?.length,
       });
@@ -79,7 +81,6 @@ function QuizPage() {
     );
     setMyAnswer("");
     setAnsweredChoice(null);
-    setCheckIfCorrect(false);
   };
 
   const handleRandomQuestion = () => {
@@ -93,6 +94,7 @@ function QuizPage() {
         incorrectAnsweredQuestions.push(eachQuestion!);
       }
       skipQuestion();
+      setCheckIfCorrect(false);
     }, 1500);
   };
 
@@ -104,11 +106,7 @@ function QuizPage() {
   };
 
   return (
-    <div
-      className={cn({
-        "anim-fade-out-fast": currentQuiz?.questions.length === 0,
-      })}
-    >
+    <div>
       {currentQuiz?.questions.length === 0 ? (
         <StatisticsSection
           courseId={+courseId!}
@@ -164,18 +162,24 @@ function QuizPage() {
                     </>
                   ) : (
                     <AnswerTyping
+                      value={myAnswer}
+                      isCorrect={checkIfCorrect && isCorrect}
+                      isIncorrect={checkIfCorrect && !isCorrect}
                       question={question.question}
-                      onChange={e => setMyAnswer(e.target.value)}
+                      onChange={(e) => setMyAnswer(e.target.value)}
                     />
                   )}
 
-                  <Button
-                    disabled={checkIfCorrect || !myAnswer}
-                    className="main-btn"
-                    onClick={handleRandomQuestion}
-                  >
-                    Check
-                  </Button>
+                  <div className="space-y-2 text-right">
+                    <Button
+                      disabled={checkIfCorrect || !myAnswer}
+                      className="main-btn w-full"
+                      onClick={handleRandomQuestion}
+                    >
+                      Check
+                    </Button>
+                    <SubmitReportDialog quizId={+quizId!} />
+                  </div>
                 </main>
               );
             })

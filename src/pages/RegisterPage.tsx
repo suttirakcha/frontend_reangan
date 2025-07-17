@@ -37,7 +37,7 @@ function RegisterPage() {
       toast.success(t(res.data.message));
       navigate("/login")
     } catch (err: any) {
-      toast.error(t(err.response?.data?.message))
+      toast.error(t(err.response?.data?.message || err.message))
     } finally {
       reset();
     }
@@ -52,7 +52,7 @@ function RegisterPage() {
       <h1 className="title text-center mb-6">{t("Register to start learning")}</h1>
       <label className="flex flex-col w-full gap-1">
         {t("Username")}
-        <Input {...register("username")}placeholder={t("Enter your username")} />
+        <Input {...register("username")} placeholder={t("Enter your username")} />
         {errors.username && (
           <p className="text-red-500 text-sm">{t(errors.username?.message!)}</p>
         )}

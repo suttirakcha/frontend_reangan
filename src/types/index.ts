@@ -1,3 +1,4 @@
+import type { CourseDetailFields } from "@/schemas/courseDetailSchema";
 import type {
   ForgotPasswordFields,
   ResetPasswordFields,
@@ -6,6 +7,7 @@ import type { LoginFields } from "@/schemas/loginSchema";
 import type { RegisterFields } from "@/schemas/registerSchema";
 import type { UserFields } from "@/schemas/userSchema";
 import type { AxiosResponse } from "axios";
+import type { ReactNode } from "react";
 
 export interface FormInputProps {
   label: string;
@@ -31,10 +33,25 @@ export type User = {
   id?: number;
   username: string;
   email: string;
+  role: string;
+};
+
+export type Menu = {
+  text: string;
+  link: string;
+  icon: ReactNode;
+};
+
+export type Report = {
+  id?: number;
+  issue: string;
+  detail: string;
+  isResolved: boolean;
+  quizId: number;
 };
 
 export type CurrentCourse = DataDetail & { lessons: Lesson[] };
-export type LoginPromise = LoginFields & { message: string };
+export type LoginPromise = LoginFields & { message: string; result: User };
 export type RegisterPromise = RegisterFields & { message: string };
 export type UserPromise = UserFields & { message: string };
 
@@ -68,6 +85,23 @@ export type CourseState = {
   clearCourse: () => void;
 };
 
+export type AdminCourseState = {
+  courses: Course[];
+  getCourses: () => Promise<void>;
+  getCourseById: (id: number) => Promise<AxiosResponse>;
+  createCourse: (data: DataDetail) => Promise<AxiosResponse>;
+  updateCourse: (data: DataDetail, courseId: number) => Promise<AxiosResponse>;
+  deleteCourse: (courseId: number) => Promise<AxiosResponse>;
+};
+
+export type AdminLessonState = {
+  lessons: Lesson[];
+  getLessons: () => Promise<void>;
+  createLesson: (data: Lesson) => Promise<AxiosResponse>;
+  updateLesson: (data: Lesson, courseId: number) => Promise<AxiosResponse>;
+  deleteLesson: (courseId: number) => Promise<AxiosResponse>;
+};
+
 export type QuizState = {
   currentQuiz: Quiz | null;
   incorrectAnsweredQuestions: Question[];
@@ -83,13 +117,23 @@ export type QuizState = {
   clearQuiz: () => void;
 };
 
+export type ReportState = {
+  reports: Report[];
+  getReports: () => Promise<void>;
+  getReportById: (reportId: number) => Promise<AxiosResponse>;
+  sendReport: (data: Report) => Promise<AxiosResponse>;
+};
+
 export type DataDetail = {
   id?: number;
   title: string;
   description?: string;
 };
 
-export type QuestionType = "multiple_choice" | "typing"
+export type Course = DataDetail & { lessons: Lesson[] }
+export type Lesson = DataDetail & { quizzes: Quiz[], courseId?: number };
+
+export type QuestionType = "multiple_choice" | "typing";
 
 export type Question = {
   id?: number;
@@ -131,11 +175,10 @@ export type StatisticsState = {
 };
 
 export type EnrolledCourse = DataDetail & { lessons: Lesson[] };
-export type Lesson = DataDetail & { quizzes: Quiz[] };
 
 export type SettingsState = {
   darkMode: boolean;
   setDarkMode: (val: boolean) => void;
   language: string;
   setLanguage: (val: string) => void;
-}
+};

@@ -4,7 +4,10 @@ import { type UserState } from "../types";
 import { authApi, userApi } from "@/api/routesApi";
 import type { UserFields } from "@/schemas/userSchema";
 import { addToken } from "@/lib/utils";
-import type { ForgotPasswordFields, ResetPasswordFields } from "@/schemas/forgotPasswordSchema";
+import type {
+  ForgotPasswordFields,
+  ResetPasswordFields,
+} from "@/schemas/forgotPasswordSchema";
 
 const useUserStore = create<UserState>()(
   persist(
@@ -42,7 +45,7 @@ const useUserStore = create<UserState>()(
         const res = await authApi.patch(`/reset-password/${token}`, data);
         set({ resetPasswordToken: null });
         return res;
-      }
+      },
     }),
     {
       name: "user-storage",

@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,6 +15,7 @@ interface LanguageSwitcherProps {
 const languages = [
   { lang: "en", text: "English" },
   { lang: "th", text: "ภาษาไทย" },
+  { lang: "zh", text: "中文" }
 ];
 
 function LanguageSwitcher({ className }: LanguageSwitcherProps) {
@@ -23,7 +23,7 @@ function LanguageSwitcher({ className }: LanguageSwitcherProps) {
   const { language, setLanguage } = useSettingsStore();
 
   const currentLang = (lang: string) => {
-    return lang === "th" ? "ภาษาไทย" : "English";
+    return lang === "th" ? "ภาษาไทย" : lang === "zh" ? "中文" : "English";
   };
 
   const handleChangeLanguage = (lang: string) => {

@@ -8,6 +8,7 @@ import { Progress } from "@/components/ui/progress";
 import useQuizStore from "@/stores/useQuizStore";
 import useUserStore from "@/stores/useUserStore";
 import { useTranslation } from "react-i18next";
+import StatCard from "@/components/dashboard/StatCard";
 
 function MainPage() {
   const { t } = useTranslation();
@@ -67,38 +68,41 @@ function MainPage() {
       className="flex flex-col w-full"
     >
       <div className="grid grid-cols-3 gap-12">
-        <div className="col-span-2 flex flex-col gap-4">
+        <div className="col-span-2 flex flex-col gap-6">
           <div className="dash-border w-full flex flex-col gap-4">
             <p className="text-xl font-medium text-center">{quote.text}</p>
             <p className="text-gray-500 text-end">{quote.author}</p>
           </div>
-          <h2 className="title-sm">{t("Current progress")}</h2>
-          <div className="dash-border w-full flex flex-col gap-4">
-            {enrolledCourses ? (
-              <div className="space-y-4">
-                <div className="flex items-center gap-4">
-                  <p className="text-xl font-medium">
-                    {enrolledCourses[courseIndex]?.title} (
-                    {completedQuizPercentage.toFixed(0)}%)
-                  </p>
-                  <Link
-                    to={`/dashboard/course/${enrolledCourses[courseIndex]?.id}/lessons`}
-                    className="text-sm text-orange-500 hover:text-orange-400"
-                  >
-                    {t("Continue")}
-                  </Link>
+          <div className="space-y-2">
+            <h2 className="title-sm">{t("Current progress")}</h2>
+            <div className="dash-border w-full flex flex-col gap-4">
+              {enrolledCourses ? (
+                <div className="space-y-4">
+                  <div className="flex items-center gap-4">
+                    <p className="text-xl font-medium">
+                      {enrolledCourses[courseIndex]?.title} (
+                      {completedQuizPercentage.toFixed(0)}%)
+                    </p>
+                    <Link
+                      to={`/dashboard/course/${enrolledCourses[courseIndex]?.id}/lessons`}
+                      className="text-sm text-orange-500 hover:text-orange-400"
+                    >
+                      {t("Continue")}
+                    </Link>
+                  </div>
+                  <Progress
+                    value={completedQuizPercentage || 0}
+                    className="h-3"
+                  />
                 </div>
-                <Progress
-                  value={completedQuizPercentage || 0}
-                  className="h-3"
-                />
-              </div>
-            ) : (
-              <p>
-                {t("Let's explore the courses you might be interested in!")}
-              </p>
-            )}
+              ) : (
+                <p>
+                  {t("Let's explore the courses you might be interested in!")}
+                </p>
+              )}
+            </div>
           </div>
+          <StatCard />
         </div>
         <EnrolledCoursesSidebar />
       </div>

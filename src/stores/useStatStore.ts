@@ -4,7 +4,7 @@ import useUserStore from "./useUserStore";
 import { addToken } from "@/lib/utils";
 import type { StatisticsState, Statistics } from "@/types";
 
-const useStatStore = create<StatisticsState>()((set, get) => ({
+const useStatStore = create<StatisticsState>()((set) => ({
   statistics: null,
   achievements: [],
   getStatistics: async () => {
