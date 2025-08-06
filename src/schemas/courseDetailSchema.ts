@@ -12,17 +12,18 @@ export const questionsSchema = z.object({
   correct_answer: z.string(),
   choices: z.string(),
   question_type: z.enum(["multiple_choices", "typing"]),
-  quizId: z.number()
+  quizId: z.number().optional()
 })
 
 export const quizzesSchema = z.object({
-  title: z.string()
+  title: z.string(),
+  lessonId: z.number().optional()
 })
 
 export const lessonDetailSchema = z.object({
   title: z.string(),
   description: z.string(),
-  courseId: z.number()
+  courseId: z.number().optional()
 });
 
 export type LessonDetailFields = z.infer<typeof lessonDetailSchema>;

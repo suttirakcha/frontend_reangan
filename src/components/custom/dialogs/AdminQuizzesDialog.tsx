@@ -52,7 +52,8 @@ function AdminQuizzesDialog({ lessonId, quizzes }: AdminQuizzesDialogProps) {
       const res = await (quizId
         ? updateQuiz(data, quizId)
         : createQuiz({
-            title: data.title
+            title: data.title,
+            lessonId: +lessonId!
           }));
       toast.success(res.data.message);
       await getLessons();
