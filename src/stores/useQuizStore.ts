@@ -1,6 +1,6 @@
-import { courseApi, quizApi } from "@/api/routesApi";
+import { courseApi, instance, quizApi } from "@/api/routesApi";
 import { create } from "zustand";
-import useUserStore from "./useUserStore";
+
 import { addToken } from "@/lib/utils";
 import { type QuizState } from "@/types";
 import { persist } from "zustand/middleware";
@@ -13,9 +13,9 @@ const useQuizStore = create<QuizState>()(
       incorrectAnsweredQuestions: [],
       finishedQuizzes: [],
       getFinishedQuizzes: async () => {
-        const { accessToken: token } = useUserStore.getState();
-        const res = await quizApi.get("/finished", addToken(token!));
-        set({ finishedQuizzes: res.data.finishedQuizzes })
+        const token = localStorage.getItem("accessToken");
+        const res = await instance.get(`${quizApi}/finished`, addToken(token!));
+        set({ finishedQuizzes: res.data.finishedQuizzes });
       },
       getCurrentQuiz: async (
         courseId: number,
@@ -23,9 +23,9 @@ const useQuizStore = create<QuizState>()(
         quizId: number
       ) => {
         set({ loading: true });
-        const { accessToken: token } = useUserStore.getState();
-        const res = await courseApi.get(
-          `/${courseId}/lessons/${lessonId}/quiz/${quizId}`,
+        const token = localStorage.getItem("accessToken");
+        const res = await instance.get(
+          `${courseApi}/${courseId}/lessons/${lessonId}/quiz/${quizId}`,
           addToken(token!)
         );
         set({ currentQuiz: res.data.quiz, loading: false });
@@ -35,9 +35,9 @@ const useQuizStore = create<QuizState>()(
         lessonId: number,
         quizId: number
       ) => {
-        const { accessToken: token } = useUserStore.getState();
-        await courseApi.post(
-          `/${courseId}/lessons/${lessonId}/quiz/${quizId}`,
+        const token = localStorage.getItem("accessToken");
+        await instance.post(
+          `${courseApi}/${courseId}/lessons/${lessonId}/quiz/${quizId}`,
           {},
           addToken(token!)
         );

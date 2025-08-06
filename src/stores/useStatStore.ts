@@ -1,6 +1,5 @@
-import { statApi } from "@/api/routesApi";
+import { instance, statApi } from "@/api/routesApi";
 import { create } from "zustand";
-import useUserStore from "./useUserStore";
 import { addToken } from "@/lib/utils";
 import type { StatisticsState, Statistics } from "@/types";
 
@@ -8,13 +7,13 @@ const useStatStore = create<StatisticsState>()((set) => ({
   statistics: null,
   achievements: [],
   getStatistics: async () => {
-    const token = useUserStore.getState().accessToken;
-    const res = await statApi.get("/", addToken(token!));
+    const token = localStorage.getItem("accessToken");
+    const res = await instance.get(`${statApi}/`, addToken(token!));
     set({ statistics: res.data.statistics });
   },
   createStatistics: async () => {
-    const token = useUserStore.getState().accessToken;
-    const res = await statApi.post("/", {
+    const token = localStorage.getItem("accessToken");
+    const res = await instance.post(`${statApi}/`, {
       exp: 0,
       incorrect_answered: 0,
       correct_answered: 0
@@ -22,8 +21,8 @@ const useStatStore = create<StatisticsState>()((set) => ({
     set({ statistics: res.data.statistics });
   },
   updateExp: async (data: Statistics) => {
-    const token = useUserStore.getState().accessToken;
-    await statApi.patch("/", data, addToken(token!));
+    const token = localStorage.getItem("accessToken");
+    await instance.patch(`${statApi}/`, data, addToken(token!));
   },
 }));
 

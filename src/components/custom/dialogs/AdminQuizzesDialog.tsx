@@ -8,13 +8,16 @@ import type { Quiz } from "@/types";
 import { Input } from "@/components/ui/input";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import { Check, Edit, Trash2 } from "lucide-react";
 import useAdminQuizStore from "@/stores/useAdminQuizStore";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { quizzesSchema } from "@/schemas/courseDetailSchema";
+import {
+  quizzesSchema,
+  type QuizDetailFields,
+} from "@/schemas/courseDetailSchema";
 import {
   Dialog,
   DialogContent,
@@ -25,28 +28,31 @@ import {
 } from "@/components/ui/dialog";
 import useAdminLessonStore from "@/stores/useAdminLessonStore";
 
-interface AdminQuizzesSectionProps {
+interface AdminQuizzesDialogProps {
   lessonId: number;
   quizzes: Quiz[];
 }
 
-function AdminQuizzesSection({ lessonId, quizzes }: AdminQuizzesSectionProps) {
+function AdminQuizzesDialog({ lessonId, quizzes }: AdminQuizzesDialogProps) {
   const { t } = useTranslation();
-  const [quizId, setQuizId] = useState(null);
-  const { createQuiz, updateQuiz, deleteQuiz } = useAdminQuizStore();
-  const { register, handleSubmit } = useForm({
+  const [quizId, setQuizId] = useState<number | null>(null);
+  const {
+    createQuiz,
+    updateQuiz,
+    deleteQuiz,
+  } = useAdminQuizStore();
+  const { register, handleSubmit } = useForm<QuizDetailFields>({
     resolver: zodResolver(quizzesSchema),
   });
 
   const { getLessons } = useAdminLessonStore();
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: QuizDetailFields) => {
     try {
       const res = await (quizId
         ? updateQuiz(data, quizId)
         : createQuiz({
-            title: data.title,
-            lessonId,
+            title: data.title
           }));
       toast.success(res.data.message);
       await getLessons();
@@ -57,11 +63,22 @@ function AdminQuizzesSection({ lessonId, quizzes }: AdminQuizzesSectionProps) {
   };
 
   const handleDelete = async (id: number) => {
-    deleteQuiz(id);
-    await getLessons();
-  }
+    try {
+      const res = await deleteQuiz(id);
+      toast.success(res.data.message);
+      await getLessons();
+    } catch (err: any) {
+      toast.error(err.response?.data.message || err.message);
+    }
+  };
 
-  const QuizForm = ({ id, defaultValue }: { id?: number, defaultValue?: string }) => {
+  const QuizForm = ({
+    id,
+    defaultValue,
+  }: {
+    id?: number;
+    defaultValue?: string;
+  }) => {
     return (
       <form className="flex gap-2 w-full" onSubmit={handleSubmit(onSubmit)}>
         <Input
@@ -91,30 +108,49 @@ function AdminQuizzesSection({ lessonId, quizzes }: AdminQuizzesSectionProps) {
             {quizzes?.map((quiz) => (
               <div className="flex items-start justify-between w-full gap-4">
                 {quizId !== quiz.id ? (
-                  <Accordion type="single" collapsible key={quiz.id} className="w-full">
+                  <Accordion
+                    type="single"
+                    collapsible
+                    key={quiz.id}
+                    className="w-full"
+                  >
                     <AccordionItem value={quiz.title}>
                       <AccordionTrigger className="p-0">
                         {quiz.title} ({quiz.questions?.length || 0} question
                         {quiz.questions?.length === 1 ? "" : "s"})
                       </AccordionTrigger>
                       <AccordionContent>
-                        {quiz.questions?.map((question) => (
-                          <div className="border-b pb-4">
-                            <h2 className="title-sm">{question.question}</h2>
-                            <p className="text-lg">
-                              Answer: {question.correct_answer}
-                            </p>
-                          </div>
-                        ))}
+                        {quiz.questions?.length > 0 ? (
+                          <>
+                            {quiz.questions?.map((question) => (
+                              <div className="border-b py-2">
+                                <h2 className="text-lg">
+                                  Q: {question.question}
+                                </h2>
+                                <p className="text-lg">
+                                  A: {question.correct_answer}
+                                </p>
+                              </div>
+                            ))}
+                          </>
+                        ) : (
+                          <p>No questions shown here</p>
+                        )}
                       </AccordionContent>
                     </AccordionItem>
                   </Accordion>
                 ) : (
-                  <QuizForm defaultValue={quiz.title} id={quiz.id}/>
+                  <QuizForm defaultValue={quiz.title} id={quiz.id} />
                 )}
                 <div className="flex items-center gap-2">
-                  <Edit onClick={() => setQuizId(quizId ? null : +quiz.id!)} className="h-5 w-5" />
-                  <Trash2 onClick={() => handleDelete(+quiz.id!)} className="h-5 w-5" />
+                  <Edit
+                    onClick={() => setQuizId(quizId ? null : +quiz.id!)}
+                    className="h-5 w-5"
+                  />
+                  <Trash2
+                    onClick={() => handleDelete(+quiz.id!)}
+                    className="h-5 w-5"
+                  />
                 </div>
               </div>
             ))}
@@ -127,4 +163,4 @@ function AdminQuizzesSection({ lessonId, quizzes }: AdminQuizzesSectionProps) {
   );
 }
 
-export default AdminQuizzesSection;
+export default AdminQuizzesDialog;

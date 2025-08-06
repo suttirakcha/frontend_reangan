@@ -18,12 +18,21 @@ import { type DataDetail } from "@/types";
 import useAdminLessonStore from "@/stores/useAdminLessonStore";
 import DeleteLessonDialog from "@/components/custom/dialogs/DeleteLessonDialog";
 import { Button } from "@/components/ui/button";
-import AdminQuizzesSection from "@/components/custom/AdminQuizzesSection";
+import AdminQuizzesDialog from "@/components/custom/dialogs/AdminQuizzesDialog";
+import {
+  Card,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import AdminQuestionDialog from "@/components/custom/dialogs/AdminQuestionDialog";
 
 function SingleCoursePage() {
   const { courseId } = useParams();
   const { getCourseById } = useAdminCourseStore();
   const { lessons, getLessons } = useAdminLessonStore();
+  const [quizId, setQuizId] = useState<number | null>(null);
   const [course, setCourse] = useState<DataDetail | null>(null);
   const [lessonId, setLessonId] = useState(null);
 
@@ -82,7 +91,7 @@ function SingleCoursePage() {
                   {lesson.description}
                 </TableCell>
                 <TableCell onClick={(e) => e.stopPropagation()}>
-                  <AdminQuizzesSection
+                  <AdminQuizzesDialog
                     quizzes={lesson?.quizzes!}
                     lessonId={lesson?.id!}
                   />
@@ -112,6 +121,47 @@ function SingleCoursePage() {
       ) : (
         <p>No lessons found</p>
       )}
+
+      <div className="flex items-center justify-between">
+        <h1 className="title">Questions</h1>
+        <AdminQuestionDialog
+          trigger={<Button className="main-btn w-fit">Add question</Button>}
+        />
+      </div>
+
+      {filteredLessons?.map((lesson) => {
+        const totalQuizzes = lesson?.quizzes;
+        return (
+          <>
+            {totalQuizzes?.map((quiz) => (
+              <div className="space-y-4" key={quiz.id}>
+                <h2 className="title-sm">{quiz.title}</h2>
+                <div className="grid grid-cols-3 gap-4">
+                  {quiz?.questions?.map((question) => (
+                    <Card key={question.id}>
+                      <CardHeader>
+                        <CardTitle>{question.question}</CardTitle>
+                        <CardDescription>
+                          <p>Answer: {question.correct_answer}</p>
+                          <p>Type: {question.question_type}</p>
+                        </CardDescription>
+                      </CardHeader>
+                      <CardFooter>
+                        <AdminQuestionDialog
+                          trigger={<Edit />}
+                          question={question}
+                          quizzes={totalQuizzes}
+                          id={+question.id!}
+                        />
+                      </CardFooter>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </>
+        );
+      })}
     </DashboardSection>
   );
 }

@@ -6,7 +6,7 @@ function AdminLayout() {
   return (
     <main className="lg:flex anim-fade">
       <AdminSidebar className="max-lg:hidden" />
-      <div className="max-lg:mt-15 flex w-full max-lg:min-h-[calc(100dvh_-_60px)] min-h-dvh p-8 max-w-[1300px] mx-auto">
+      <div className="max-lg:mt-15 flex w-full max-lg:h-[calc(100dvh_-_60px)] overflow-auto h-dvh max-h-dvh p-8 max-w-[1300px] mx-auto">
         <DashboardHeader />
         <Outlet />
       </div>

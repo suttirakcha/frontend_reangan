@@ -18,7 +18,6 @@ import { useState, type ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import AdminQuizzesSection from "../AdminQuizzesSection";
 
 interface AdminLessonDialogProps {
   trigger: ReactNode;
@@ -42,8 +41,7 @@ function AdminLessonDialog({ trigger, courseId, id }: AdminLessonDialogProps) {
         : createLesson({
             title: data.title,
             description: data.description,
-            courseId,
-            quizzes: [],
+            courseId: +courseId!
           }));
       toast.success(t(res.data.message));
       setOpenModal(false);
@@ -89,13 +87,6 @@ function AdminLessonDialog({ trigger, courseId, id }: AdminLessonDialogProps) {
                 {t(errors.description?.message!)}
               </p>
             )}
-          </label>
-          <label className="flex flex-col w-full gap-1">
-            {t("Quizzes")}
-            <AdminQuizzesSection
-              quizzes={findLesson?.quizzes!}
-              lessonId={findLesson?.id!}
-            />
           </label>
           <Button
             type="submit"

@@ -1,4 +1,4 @@
-import type { CourseDetailFields } from "@/schemas/courseDetailSchema";
+import type { CourseDetailFields, LessonDetailFields, QuestionDetailFields } from "@/schemas/courseDetailSchema";
 import type {
   ForgotPasswordFields,
   ResetPasswordFields,
@@ -57,7 +57,7 @@ export type UserPromise = UserFields & { message: string };
 
 export type UserState = {
   user: User | null;
-  accessToken: string | null;
+  // accessToken: string | null;
   resetPasswordToken: string | null;
   login: (user: LoginFields) => Promise<AxiosResponse<LoginPromise>>;
   register: (user: RegisterFields) => Promise<AxiosResponse<RegisterPromise>>;
@@ -97,10 +97,19 @@ export type AdminCourseState = {
 export type AdminLessonState = {
   lessons: Lesson[];
   getLessons: () => Promise<void>;
-  createLesson: (data: Lesson) => Promise<AxiosResponse>;
-  updateLesson: (data: Lesson, courseId: number) => Promise<AxiosResponse>;
+  createLesson: (data: LessonDetailFields) => Promise<AxiosResponse>;
+  updateLesson: (data: LessonDetailFields, courseId: number) => Promise<AxiosResponse>;
   deleteLesson: (courseId: number) => Promise<AxiosResponse>;
 };
+
+export type AdminQuizState = {
+  createQuiz: (data: { title: string }) => Promise<AxiosResponse>;
+  updateQuiz: (data: { title: string }, id: number) => Promise<AxiosResponse>;
+  deleteQuiz: (id: number) => Promise<AxiosResponse>;
+  createQuestion: (data: QuestionDetailFields) => Promise<AxiosResponse>;
+  updateQuestion: (data: QuestionDetailFields, id: number) => Promise<AxiosResponse>;
+  deleteQuestion: (id: number) => Promise<AxiosResponse>;
+}
 
 export type QuizState = {
   currentQuiz: Quiz | null;

@@ -1,7 +1,6 @@
-import { courseApi } from "@/api/routesApi";
+import { courseApi, instance } from "@/api/routesApi";
 import { type CourseState } from "@/types";
 import { create } from "zustand";
-import useUserStore from "./useUserStore";
 import { addToken } from "@/lib/utils";
 
 const useCourseStore = create<CourseState>()((set) => ({
@@ -10,27 +9,27 @@ const useCourseStore = create<CourseState>()((set) => ({
   currentCourse: null,
   loading: true,
   getCourses: async () => {
-    const res = await courseApi.get("/");
+    const res = await instance.get(`${courseApi}/`);
     set({ courses: res.data.courses, loading: false, currentCourse: null });
   },
   enrollCourse: async (courseId: number) => {
-    const { accessToken: token } = useUserStore.getState();
-    const res = await courseApi.post(`/${courseId}`, {}, addToken(token!));
+    const token = localStorage.getItem("accessToken");
+    const res = await instance.post(`${courseApi}/${courseId}`, {}, addToken(token!));
     return res;
   },
   unenrollCourse: async (courseId: number) => {
-    const { accessToken: token } = useUserStore.getState();
-    const res = await courseApi.delete(`/${courseId}`, addToken(token!));
+    const token = localStorage.getItem("accessToken");
+    const res = await instance.delete(`${courseApi}/${courseId}`, addToken(token!));
     return res;
   },
   getEnrolledCourses: async () => {
-    const { accessToken: token } = useUserStore.getState();
-    const res = await courseApi.get(`/enrolled`, addToken(token!));
+    const token = localStorage.getItem("accessToken");
+    const res = await instance.get(`${courseApi}/enrolled`, addToken(token!));
     set({ enrolledCourses: res.data.courses, loading: false });
   },
   getLessonsFromEnrolledCourse: async (courseId: number) => {
-    const { accessToken: token } = useUserStore.getState();
-    const res = await courseApi.get(`/${courseId}/lessons`, addToken(token!));
+    const token = localStorage.getItem("accessToken");
+    const res = await instance.get(`${courseApi}/${courseId}/lessons`, addToken(token!));
     const data = {
       title: res.data.title,
       description: res.data.description,
@@ -39,8 +38,8 @@ const useCourseStore = create<CourseState>()((set) => ({
     set({ currentCourse: data, loading: false });
   },
   clearCourse: () => {
-    set({ currentCourse: null })
-  }
+    set({ currentCourse: null });
+  },
 }));
 
 export default useCourseStore;

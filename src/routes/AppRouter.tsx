@@ -1,7 +1,9 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import { lazy, Suspense, type ReactNode } from "react";
+import { lazy, Suspense, useEffect, type ReactNode } from "react";
 import Loading from "@/components/custom/Loading";
 import useUserStore from "@/stores/useUserStore";
+import axios from "axios";
+import { authApi } from "@/api/routesApi";
 
 // Public components
 const MainLayout = lazy(() => import("@/layout/MainLayout"));

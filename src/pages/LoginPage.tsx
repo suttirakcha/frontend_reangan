@@ -39,6 +39,7 @@ function LoginPage() {
         toast.success(t(res.data.message));
       }
     } catch (err: any) {
+      console.log(err);
       toast.error(t(err.response?.data?.message));
     } finally {
       reset();

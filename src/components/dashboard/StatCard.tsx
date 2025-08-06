@@ -11,7 +11,7 @@ const StatCard = () => {
     };
 
     fetchStat();
-  }, [statistics]);
+  }, []);
 
   return (
     <div className="dash-border">
