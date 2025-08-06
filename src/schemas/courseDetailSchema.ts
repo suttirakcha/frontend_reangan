@@ -8,12 +8,15 @@ export const courseDetailSchema = z.object({
 export type CourseDetailFields = z.infer<typeof courseDetailSchema>;
 
 export const questionsSchema = z.object({
-  question: z.string(),
+  question: z.string().nonempty("Question is a required field"),
   correct_answer: z.string(),
   choices: z.string(),
   question_type: z.enum(["multiple_choices", "typing"]),
   quizId: z.number().optional()
-})
+}).refine((data) => (data.choices as string).includes(data.correct_answer), {
+    message: "No correct answer included",
+    path: ["choices"],
+  });
 
 export const quizzesSchema = z.object({
   title: z.string(),

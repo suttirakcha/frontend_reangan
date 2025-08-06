@@ -21,7 +21,7 @@ function DeleteAccountDialog() {
   const handleDeleteAccount = async () => {
     setIsDeleting(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      // await new Promise((resolve) => setTimeout(resolve, 2000));
       const res = await deleteUser();
       toast.success(t(res.data.message));
       logout();

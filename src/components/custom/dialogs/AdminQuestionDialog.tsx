@@ -41,8 +41,8 @@ function AdminQuestionDialog({
   id,
 }: AdminQuestionDialogProps) {
   const { t } = useTranslation();
-  const { register, handleSubmit, formState } = useForm<QuestionDetailFields>({
-    resolver: zodResolver(questionsSchema),
+  const { register, handleSubmit, formState, setValue } = useForm<QuestionDetailFields>({
+    // resolver: zodResolver(questionsSchema),
   });
   const { errors, isSubmitting } = formState;
   const { lessons } = useAdminLessonStore();
@@ -50,7 +50,8 @@ function AdminQuestionDialog({
 
   const onSubmit = async (data: QuestionDetailFields) => {
     try {
-      const res = await (id ? updateQuestion(data, id) : createQuestion(data));
+      const result = { ...data, quizId: +data.quizId! }
+      const res = await (id ? updateQuestion(result, id) : createQuestion(result));
       toast.success(res.data.message);
     } catch (err: any) {
       toast.error(err.response?.data.message || err.message);
@@ -108,7 +109,7 @@ function AdminQuestionDialog({
             {t("Question type")}
             <Select
               {...register("question_type")}
-              defaultValue={question?.question_type}
+              onValueChange={(val) => setValue("question_type", val)}
             >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Question type" />
@@ -141,14 +142,14 @@ function AdminQuestionDialog({
             {t("Quiz")}
             <Select
               {...register("quizId")}
-              defaultValue={question?.question_type}
+              onValueChange={(val) => setValue("quizId", val)}
             >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Question type" />
               </SelectTrigger>
               <SelectContent>
                 {quizzes?.map(quiz => (
-                  <SelectItem value={quiz?.id!} key={quiz.id}>{quiz.title}</SelectItem>
+                  <SelectItem value={String(quiz.id)} key={quiz.id}>{quiz.title}</SelectItem>
                 ))}
               </SelectContent>
             </Select>

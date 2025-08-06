@@ -32,7 +32,7 @@ function RegisterPage() {
 
   const onSubmit: SubmitHandler<RegisterFields> = async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      // await new Promise((resolve) => setTimeout(resolve, 2000));
       const res = await registerUser(data);
       toast.success(t(res.data.message));
       navigate("/login")

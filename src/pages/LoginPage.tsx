@@ -30,7 +30,7 @@ function LoginPage() {
 
   const onSubmit: SubmitHandler<LoginFields> = async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      // await new Promise((resolve) => setTimeout(resolve, 2000));
       const res = await login(data);
 
       const { role } = res.data?.result;

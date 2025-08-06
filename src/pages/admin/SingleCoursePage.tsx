@@ -14,7 +14,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import AdminLessonDialog from "@/components/custom/dialogs/AdminLessonDialog";
-import { type DataDetail } from "@/types";
+import { type DataDetail, type Quiz } from "@/types";
 import useAdminLessonStore from "@/stores/useAdminLessonStore";
 import DeleteLessonDialog from "@/components/custom/dialogs/DeleteLessonDialog";
 import { Button } from "@/components/ui/button";
@@ -50,6 +50,11 @@ function SingleCoursePage() {
   const filteredLessons = lessons?.filter(
     (lesson: any) => lesson.courseId === +courseId!
   );
+
+  const allQuizzes = filteredLessons?.reduce<Quiz[]>(
+    (acc, curr) => [...acc, ...curr.quizzes],
+    []
+  ) ?? [];
 
   return (
     <DashboardSection
@@ -126,6 +131,7 @@ function SingleCoursePage() {
         <h1 className="title">Questions</h1>
         <AdminQuestionDialog
           trigger={<Button className="main-btn w-fit">Add question</Button>}
+          quizzes={allQuizzes}
         />
       </div>
 
@@ -150,7 +156,7 @@ function SingleCoursePage() {
                         <AdminQuestionDialog
                           trigger={<Edit />}
                           question={question}
-                          quizzes={totalQuizzes}
+                          quizzes={allQuizzes}
                           id={+question.id!}
                         />
                       </CardFooter>
