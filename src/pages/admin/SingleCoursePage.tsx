@@ -27,14 +27,15 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import AdminQuestionDialog from "@/components/custom/dialogs/AdminQuestionDialog";
+import DeleteQuestionDialog from "@/components/custom/dialogs/DeleteQuestionDialog";
 
 function SingleCoursePage() {
   const { courseId } = useParams();
   const { getCourseById } = useAdminCourseStore();
   const { lessons, getLessons } = useAdminLessonStore();
-  const [quizId, setQuizId] = useState<number | null>(null);
   const [course, setCourse] = useState<DataDetail | null>(null);
   const [lessonId, setLessonId] = useState(null);
+  const [questionId, setQuestionId] = useState<number | null>(null);
 
   useEffect(() => {
     const run = async () => {
@@ -51,10 +52,11 @@ function SingleCoursePage() {
     (lesson: any) => lesson.courseId === +courseId!
   );
 
-  const allQuizzes = filteredLessons?.reduce<Quiz[]>(
-    (acc, curr) => [...acc, ...curr.quizzes],
-    []
-  ) ?? [];
+  const allQuizzes =
+    filteredLessons?.reduce<Quiz[]>(
+      (acc, curr) => [...acc, ...curr.quizzes],
+      []
+    ) ?? [];
 
   return (
     <DashboardSection
@@ -136,10 +138,9 @@ function SingleCoursePage() {
       </div>
 
       {filteredLessons?.map((lesson) => {
-        const totalQuizzes = lesson?.quizzes;
         return (
           <>
-            {totalQuizzes?.map((quiz) => (
+            {lesson?.quizzes?.map((quiz) => (
               <div className="space-y-4" key={quiz.id}>
                 <h2 className="title-sm">{quiz.title}</h2>
                 <div className="grid grid-cols-3 gap-4">
@@ -152,12 +153,16 @@ function SingleCoursePage() {
                           <p>Type: {question.question_type}</p>
                         </CardDescription>
                       </CardHeader>
-                      <CardFooter>
+                      <CardFooter className="flex items-center gap-2">
                         <AdminQuestionDialog
                           trigger={<Edit />}
                           question={question}
                           quizzes={allQuizzes}
                           id={+question.id!}
+                        />
+                        <DeleteQuestionDialog
+                          id={+questionId!}
+                          setId={() => setQuestionId(+question.id!)}
                         />
                       </CardFooter>
                     </Card>

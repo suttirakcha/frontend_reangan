@@ -19,7 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import useAdminQuizStore from "@/stores/useAdminQuizStore";
-import type { Question, Quiz } from "@/types";
+import type { Question, QuestionType, Quiz } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { ReactNode } from "react";
 import { useForm } from "react-hook-form";

@@ -37,7 +37,7 @@ function ReportsPage() {
             <TableRow>
               <TableHead className="font-bold text-base">Report ID</TableHead>
               <TableHead className="font-bold text-base">Issues</TableHead>
-              <TableHead className="font-bold text-base text-right">
+              <TableHead className="font-bold text-base text-center">
                 Resolved
               </TableHead>
             </TableRow>
@@ -51,7 +51,7 @@ function ReportsPage() {
               >
                 <TableCell>{report.id}</TableCell>
                 <TableCell>{report.issue}</TableCell>
-                <TableCell className="text-right">
+                <TableCell className="flex justify-center">
                   {report.isResolved ? (
                     <CircleCheck className="text-green-600" />
                   ) : (
