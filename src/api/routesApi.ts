@@ -33,7 +33,7 @@ instance.interceptors.response.use(
     if (
       err.response.status === 401 &&
       !originalRequest._retry &&
-      !originalRequest.url.includes("/refresh")
+      !originalRequest.url.includes("/refresh-token")
     ) {
       originalRequest._retry = true;
 
@@ -56,6 +56,7 @@ instance.interceptors.response.use(
         return Promise.reject(error);
       }
     }
+    return Promise.reject(err);
   }
 );
 
