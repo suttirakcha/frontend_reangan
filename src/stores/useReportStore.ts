@@ -20,9 +20,9 @@ const useReportStore = create<ReportState>()((set, get) => ({
     const res = await instance.post(`${reportApi}/`, data, addToken(token!));
     return res;
   },
-  resolveIssues: async (isResolved: boolean) => {
+  resolveIssues: async (id: number, isResolved: boolean) => {
     const token = localStorage.getItem("accessToken");
-    const res = await instance.post(`${reportApi}/`, { isResolved }, addToken(token!));
+    const res = await instance.patch(`${reportApi}/${id}`, { isResolved }, addToken(token!));
     return res;
   },
 }));

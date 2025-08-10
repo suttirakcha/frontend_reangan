@@ -131,6 +131,7 @@ export type ReportState = {
   getReports: () => Promise<void>;
   getReportById: (reportId: number) => Promise<AxiosResponse>;
   sendReport: (data: Report) => Promise<AxiosResponse>;
+  resolveIssues: (reportId: number, isResolved: boolean) => Promise<AxiosResponse>;
 };
 
 export type DataDetail = {
